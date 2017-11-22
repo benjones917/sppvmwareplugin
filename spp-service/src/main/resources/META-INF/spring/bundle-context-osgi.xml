@@ -18,6 +18,9 @@
 
    <osgi:service id="SampleActionService" ref="SampleActionServiceImpl"
          interface="com.ibm.spp.services.SampleActionService" />
+         
+   <osgi:service id="SppService" ref="SppServiceImpl"
+         interface="com.ibm.spp.services.SppService" />
 
   <!-- References to platform services used by the controllers -->
 

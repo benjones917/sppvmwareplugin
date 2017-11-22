@@ -25,8 +25,21 @@
       <extendedPoint>vise.home.shortcuts</extendedPoint>
       <object>
          <name>#{app.name}</name>
+         <icon>#{appIcon}</icon>
          <categoryUid>vsphere.core.controlcenter.monitoringCategory</categoryUid>
          <targetViewUid>com.ibm.spp.mainView</targetViewUid>
+      </object>
+   </extension>
+   
+   <!-- Add link to the Object Navigator -->
+   <extension id="com.ibm.spp.node">
+      <extendedPoint>vise.navigator.nodespecs</extendedPoint>
+      <object>
+         <title>#{app.name}</title>
+         <icon>#{appIconSmall}</icon>
+         <parentUid>vsphere.core.navigator.solutionsCategory</parentUid>
+         <navigationTargetUid>com.ibm.spp.mainView</navigationTargetUid>
+         <viewOpenedUponFocus className="com.vmware.ui.objectnavigator.views.CategoryNodeTreeView" />
       </object>
    </extension>
 

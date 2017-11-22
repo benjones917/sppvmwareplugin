@@ -32,3 +32,22 @@
     vertical-align: text-bottom;
     margin: 1px 4px 0;
 }
+
+.com_ibm_spp-appIcon {
+	background: url("../images/appIcon.png");
+	background-repeat: no-repeat;
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    vertical-align: top;
+}
+.com_ibm_spp-appIconSmall {
+    background: url("../images/appIconSmall.png");
+    background-repeat: no-repeat;
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: top;
+    margin: 1px 4px 0;
+}
+

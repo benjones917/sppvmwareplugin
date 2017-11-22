@@ -3,48 +3,39 @@
 <html>
 <head>
    <meta charset="utf-8" />
-   <title>spp main view</title>
+   <title>sppui main view</title>
    <!-- Relative paths are required to keep plugin compatible with Flex and HTML clients -->
    <link rel="stylesheet" href="../assets/css/default.css" media="screen" />
+   <link rel="stylesheet" href="../assets/css/pure-min.css">
 
    <!-- Safer not to use CDN links to javascript libraries, the Internet may not be available! -->
    <script src="../assets/jquery-1.10.2.min.js"></script>
 
    <!-- ** web-platform-bootstrap.js must be included before any other view code ** -->
    <script src="./js/web-platform-bootstrap.js"></script>
+   <script src="./js/jquery-util.js"></script>
+   <script src="./js/register-spp.js"></script>
 
-   <script>
-   // Use JQuery's $(document).ready to execute the script when the document is loaded.
-   // This also hides locale variables from the global scope.
-   $(document).ready(function() {
-
-      $("#helloBtn").click(function() {
-        // Call EchoService and displays the identical message being returned
-        var echoServiceUrl = PluginUtil.getWebContextPath() + "/rest/services/echo";
-        var msg = PluginUtil.getString("mainView.world");
-        $.post(echoServiceUrl, { message: msg},
-            function(echoStr) {
-               alert(echoStr);
-          })
-         .fail(function(jqXHR, status, error) {
-            var response = jqXHR.responseJSON;
-            alert( "echoService error: " + response.message +
-                  "\nCause: " + response.cause);
-         });
-      });
-
-      // Use strings from resource bundle
-      $("#title").text(PluginUtil.getString("mainView.title"));
-      $("#clickToCall").text(PluginUtil.getString("mainView.clickToCall"));
-      $("#helloBtn").text(PluginUtil.getString("mainView.helloBtn"));
-
-   }); // end $(document).ready
-   </script>
-</head>
-<body>
-   <!-- The default text is replaced at runtime by localized resources -->
-   <h3 id="title">Main View</h3>
-   <p id="clickToCall">Click to call the EchoService</p>
-   <button id="helloBtn">Hello</button>
-</body>
+	</head>
+	<body>
+		<h3 id="title">Server Registration</h3>
+		<form id="registerForm" class="pure-form pure-form-aligned" action="/rest/spp/register">
+			<div class="pure-control-group">
+			<label id="sppHostLabel" for="sppHost">SPP Hostname/IP</label>
+			<input type="text" name="sppHost" id="sppHost"><br>
+			</div>
+			<div class="pure-control-group">
+			<label id="sppUserLabel" for="sppUser">SPP Username</label>
+			<input type="text" name="sppUser" id="sppUser"><br>
+			</div>
+			<div class="pure-control-group">
+			<label id="sppPassLabel" for="sppPass">SPP Password</label>
+			<input type="password" name="sppPass" id="sppPass"><br>
+			</div>
+			<div class="pure-control-group">
+			<button  type="submit" id="submit"
+                     class="pure-button pure-button-primary">Submit</button>
+			</div>
+		</form>
+   	</body>
 </html>
