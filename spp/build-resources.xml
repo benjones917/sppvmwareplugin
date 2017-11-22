@@ -1,0 +1,9 @@
+<!-- Copyright (c) 2012-2017 VMware, Inc. All rights reserved. -->
+<!--
+   Shortcut to invoke the build script with the compile-resources target.
+-->
+<project name="spp-resources" default="compile-resources">
+   <target name="compile-resources">
+       <ant antfile="build-war.xml" target="compile-resources"/>
+   </target>
+</project>
