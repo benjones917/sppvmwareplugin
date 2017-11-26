@@ -12,5 +12,6 @@
 	<classpathentry kind="var" path="VSPHERE_CLIENT_SDK/libs/gson-2.3.1.jar"/>
 	<classpathentry kind="lib" path="src/main/httpclient-4.5.3.jar"/>
 	<classpathentry kind="lib" path="src/main/httpcore-4.4.6.jar"/>
+	<classpathentry kind="lib" path="src/main/commons-lang3-3.7.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
