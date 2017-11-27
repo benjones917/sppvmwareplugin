@@ -49,7 +49,6 @@ public class SppServiceImpl implements SppService {
 		SppSession session = sppLogIn(regInfo.getSppHost(), regInfo.getSppUser(), regInfo.getSppPass());
 		sppLogOut(regInfo.getSppHost(), session);
 		setSppRegistrationInfo(registrationInfo);
-		regInfo = getSppRegistrationInfo();
 		return "Registration succesful";
 	}
 
@@ -105,6 +104,7 @@ public class SppServiceImpl implements SppService {
 		}
 	}
 	
+	@Override
 	public RegistrationInfo getSppRegistrationInfo() {
 		String filePath = getRegistrationInfoFilePath();
 		String config;

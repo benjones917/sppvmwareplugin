@@ -1,4 +1,9 @@
 $(document).ready(function() {
+	var $reginfo = $.getJSON(PluginUtil.getWebContextPath() + "/rest/spp/register", function (data) {
+		populate('#registerForm', data);
+	});
+		
+	
 	   $("#registerForm").submit(function() {
 		      var $form = $( this ),
 		         json = {registrationInfo : $form.serializeJson()},
@@ -10,3 +15,9 @@ $(document).ready(function() {
 		         return false;
 		   });
    });
+
+function populate(frm, data) {
+	  $.each(data, function(key, value){
+	    $('[name='+key+']', frm).val(value);
+	  });
+	}

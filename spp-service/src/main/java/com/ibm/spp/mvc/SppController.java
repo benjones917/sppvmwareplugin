@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
+import com.ibm.spp.domain.RegistrationInfo;
 import com.ibm.spp.services.SppService;
 
 @Controller
@@ -43,6 +45,15 @@ public class SppController {
 	public String register(@RequestParam(value = "registrationInfo", required = true) String registrationInfo)
 			throws Exception {
 		return _sppService.register(registrationInfo);
+	}
+	
+	@RequestMapping(value = "/register", method = RequestMethod.GET)
+	@ResponseBody
+	public String register() throws Exception {
+		RegistrationInfo regInfo = new RegistrationInfo();
+		regInfo = _sppService.getSppRegistrationInfo();
+		String registration = new Gson().toJson(regInfo);
+		return registration;
 	}
 
 	@ExceptionHandler(Exception.class)
