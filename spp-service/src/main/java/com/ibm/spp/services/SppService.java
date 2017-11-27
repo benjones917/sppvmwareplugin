@@ -7,7 +7,7 @@ public interface SppService {
 
 	String getSlaPolicies();
 
-	String getSlaPoliciesForVM();
-
 	RegistrationInfo getSppRegistrationInfo();
+
+	String getSppVmInfo(String vmName);
 }

@@ -55,6 +55,28 @@ public class SppController {
 		String registration = new Gson().toJson(regInfo);
 		return registration;
 	}
+	
+	@RequestMapping(value = "/sla", method = RequestMethod.GET)
+	@ResponseBody
+	public String getAllSlaPols() throws Exception {
+		String slaPols = _sppService.getSlaPolicies();
+		return slaPols;
+	}
+	
+	@RequestMapping(value = "/vm", method = RequestMethod.GET)
+	@ResponseBody
+	public String getSppVmInfo(@RequestParam(value = "vmName", required = true) String vmName) 
+			throws Exception {
+		String vmInfo = _sppService.getSppVmInfo(vmName);
+		return vmInfo;
+	}
+	
+	@RequestMapping(value = "/assignvm", method = RequestMethod.POST)
+	@ResponseBody
+	public String assignVmToSla(@RequestParam(value = "vm", required = true) String vm,
+			@RequestParam(value = "sla", required = true) String sla) throws Exception {
+		return null;
+	}
 
 	@ExceptionHandler(Exception.class)
 	   @ResponseBody
