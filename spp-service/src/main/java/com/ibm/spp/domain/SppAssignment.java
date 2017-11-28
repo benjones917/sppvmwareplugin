@@ -2,12 +2,18 @@ package com.ibm.spp.domain;
 
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
+
 public class SppAssignment {
 	
+	@Expose
 	public static final String subtype = "vmware";
+	@Expose
 	public static final String version = "1.0";
 	
+	@Expose
 	public List<SppAssignmentResources> resources;
+	@Expose
 	public List<SppAssignmentSlapols> slapolicies;
 	
 	public SppAssignment() {

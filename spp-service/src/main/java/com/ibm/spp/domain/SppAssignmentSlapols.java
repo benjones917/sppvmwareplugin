@@ -1,9 +1,14 @@
 package com.ibm.spp.domain;
 
+import com.google.gson.annotations.Expose;
+
 public class SppAssignmentSlapols {
 	
+	@Expose
 	public String href;
+	@Expose
 	public String id;
+	@Expose
 	public String name;
 	
 	public SppAssignmentSlapols() {

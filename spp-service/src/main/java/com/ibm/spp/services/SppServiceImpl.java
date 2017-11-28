@@ -9,7 +9,9 @@ import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -34,6 +36,9 @@ import org.apache.http.util.EntityUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.ibm.spp.domain.RegistrationInfo;
+import com.ibm.spp.domain.SppAssignment;
+import com.ibm.spp.domain.SppAssignmentResources;
+import com.ibm.spp.domain.SppAssignmentSlapols;
 import com.ibm.spp.domain.SppSession;
 import com.ibm.spp.domain.SppUrls;
 
@@ -126,53 +131,6 @@ public class SppServiceImpl implements SppService {
 		return "Error getting VM Info";
 	}
 
-	// Gets OS dependent path for registration config file
-	public String getRegistrationInfoPath() {
-		String path;
-		if (SystemUtils.IS_OS_WINDOWS) {
-			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\spp";
-		} else if (SystemUtils.IS_OS_MAC) {
-			path = "/var/lib/spp";
-		} else {
-			path = "/storage/spp";
-		}
-		return path;
-	}
-	
-	// Gets OS dependent full path for registration config file (includes filename)
-	public String getRegistrationInfoFilePath() {
-		String path;
-		if (SystemUtils.IS_OS_WINDOWS) {
-			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\spp\\regInfo.config";
-		} else if (SystemUtils.IS_OS_MAC) {
-			path = "/var/lib/spp/regInfo.config";
-		} else {
-			path = "/storage/spp/regInfo.config";
-		}
-		return path;
-	}
-	
-	// Save SPP registration config to vCenterServer folder
-	// File is simple overwritten if it already exists
-	// Reg info is stored as JSON
-	public void setSppRegistrationInfo(String regInfo) {
-		String path = getRegistrationInfoPath();
-		String filePath = getRegistrationInfoFilePath();
-		try {
-			File info = new File(path);
-			File config = new File(filePath);
-			if(!info.exists()) {
-				info.mkdirs();
-				config.createNewFile();
-			}
-			BufferedWriter writer = new BufferedWriter(new FileWriter(config));
-			writer.write(regInfo);
-			writer.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	// Get SPP config data
 	// Returns as a RegistrationInfo object
 	@Override
@@ -191,9 +149,67 @@ public class SppServiceImpl implements SppService {
 		return null;
 	}
 
+	// Assign sla policy to vm
+	// Takes a list of VM and SLA policy names
+	// Controller should pass in this list from UI
+	// UI should pass in any existing SLA policy names that aren't removed
+	@Override
+	public String assignVmsToSla(List<String> vmName, List<String> slaName) {
+		SppAssignment assignData = buildAssignmentData(vmName, slaName);
+		
+		return null;
+	}
+
+	// Gets OS dependent path for registration config file
+	private String getRegistrationInfoPath() {
+		String path;
+		if (SystemUtils.IS_OS_WINDOWS) {
+			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\spp";
+		} else if (SystemUtils.IS_OS_MAC) {
+			path = "/var/lib/spp";
+		} else {
+			path = "/storage/spp";
+		}
+		return path;
+	}
+	
+	// Gets OS dependent full path for registration config file (includes filename)
+	private String getRegistrationInfoFilePath() {
+		String path;
+		if (SystemUtils.IS_OS_WINDOWS) {
+			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\spp\\regInfo.config";
+		} else if (SystemUtils.IS_OS_MAC) {
+			path = "/var/lib/spp/regInfo.config";
+		} else {
+			path = "/storage/spp/regInfo.config";
+		}
+		return path;
+	}
+	
+	// Save SPP registration config to vCenterServer folder
+	// File is simple overwritten if it already exists
+	// Reg info is stored as JSON
+	private void setSppRegistrationInfo(String regInfo) {
+		String path = getRegistrationInfoPath();
+		String filePath = getRegistrationInfoFilePath();
+		try {
+			File info = new File(path);
+			File config = new File(filePath);
+			if(!info.exists()) {
+				info.mkdirs();
+				config.createNewFile();
+			}
+			BufferedWriter writer = new BufferedWriter(new FileWriter(config));
+			writer.write(regInfo);
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	// Logs in to SPP
 	// Returns SppSession object containing the session id for other SPP API requests
-	public SppSession sppLogIn(String host, String user, String pass) {
+	private SppSession sppLogIn(String host, String user, String pass) {
 		String sppSesUrl = host + SppUrls.sppSessionUrl;
 		String userPassText = user + ":" + pass;
 		String b64UserPass = new String(Base64.getEncoder().encode(userPassText.getBytes()));
@@ -215,7 +231,7 @@ public class SppServiceImpl implements SppService {
 	}
 
 	// Logs out of SPP
-	public void sppLogOut(String host, SppSession session) {
+	private void sppLogOut(String host, SppSession session) {
 		String sppSesUrl = host + SppUrls.sppSessionUrl;
 		String sesIdHdr = session.getSessionId();
 		try {
@@ -229,6 +245,29 @@ public class SppServiceImpl implements SppService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	
+	private SppAssignment buildAssignmentData(List<String> vmName, List<String> slaName) {
+		SppAssignment assignData = new SppAssignment();
+		assignData.setResources(buildResourceData(vmName));
+		assignData.setSlapolicies(buildSlaData(slaName));
+		return assignData;
+	}
+	
+	private List<SppAssignmentResources> buildResourceData(List<String> vmName) {
+		List<SppAssignmentResources> assignmentResources = new ArrayList<SppAssignmentResources>();
+		// Iterate over list of vmNames and call getSppVmInfo for each name
+		// Deserialize to SppAssignmentResources object and add to list
+		return assignmentResources;
+	}
+	
+	private List<SppAssignmentSlapols> buildSlaData(List<String> slaName) {
+		List<SppAssignmentSlapols> assignmentSlas = new ArrayList<SppAssignmentSlapols>();
+		// Get list of SLA pols from SPP server
+		// Iterate over list of slaName parameters and compare with list of policies
+		// If found deserialize to SppAssignmentSlapols object and add to list
+		return assignmentSlas;
 	}
 
 }
