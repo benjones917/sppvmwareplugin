@@ -13,7 +13,7 @@ public interface SppService {
 
 	String getSppVmInfo(String vmName);
 
-	String assignVmToSla(String vmName, List<String> slaName);
+	String assignVmToSla(String vmName, String slaName);
 
-	String assignFolderToSla(String folderName, List<String> slaName);
+	String assignFolderToSla(String folderName, String slaName);
 }

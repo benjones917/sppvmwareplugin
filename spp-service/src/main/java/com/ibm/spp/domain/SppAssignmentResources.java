@@ -4,9 +4,6 @@ import com.google.gson.annotations.Expose;
 
 public class SppAssignmentResources {
 	
-	// may need name for easier comparison but don't want to expose for GSON serialization
-	// name is not needed for assignment API call to SPP
-	public String name;
 	@Expose
 	public String href;
 	@Expose

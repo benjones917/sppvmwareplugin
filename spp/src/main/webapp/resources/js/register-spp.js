@@ -24,7 +24,14 @@ $(document).ready(
 			
 			$('#getvminfotest').click(function () {
 				var $vmreq = $.get(PluginUtil.getWebContextPath()
-						+ "/rest/spp/vm", "vmName=BCJVM1", function(data) {
+						+ "/rest/spp/vm", "vm=BCJVM1", function(data) {
+					alert(data);
+				})
+			});
+			
+			$('#assigntest').click(function () {
+				var $assreq = $.post(PluginUtil.getWebContextPath()
+						+ "/rest/spp/assignvm", "vm=BCJVM1&sla=Gold,Silver", function(data) {
 					alert(data);
 				})
 			});

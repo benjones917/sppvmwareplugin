@@ -10,6 +10,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
 
@@ -34,7 +35,9 @@ import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ibm.spp.domain.RegistrationInfo;
 import com.ibm.spp.domain.SppAssignment;
 import com.ibm.spp.domain.SppAssignmentResources;
@@ -122,7 +125,12 @@ public class SppServiceImpl implements SppService {
 			String responseString = EntityUtils.toString(entity, "UTF-8");
 			log.info("Returning VM Info from SPP");
 			sppLogOut(regInfo.getSppHost(), session);
-			return responseString;
+			JsonObject sppVmJsonAll = (JsonObject)new JsonParser().parse(responseString);
+			JsonArray sppVmJsonArray = (JsonArray) sppVmJsonAll.get("vms");
+			// we use search API but return first result
+			// may need to change this approach as it could cause issues with wrong VM being updated
+			String vmString = sppVmJsonArray.get(0).toString();
+			return vmString;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -154,17 +162,21 @@ public class SppServiceImpl implements SppService {
 	// Takes a String of VM and List of String SLA policy names
 	// UI should pass in any existing SLA policy names that aren't removed
 	@Override
-	public String assignVmToSla(String vmName, List<String> slaName) {
-		SppAssignment assignData = buildAssignmentData(vmName, slaName);
-		
-		return null;
+	public String assignVmToSla(String vmName, String slaName) {
+		List<String> slaNameList = new ArrayList<String>();
+		slaNameList = Arrays.asList(slaName.split(","));
+		SppAssignment assignData = buildAssignmentDataVm(vmName, slaNameList);
+		String assignBody = new Gson().toJson(assignData);
+		// do POST here to make assignment in SPP
+		return assignBody;
 	}
 	
 	// Same as above but for folder
 	@Override 
-	public String assignFolderToSla(String folderName, List<String> slaName) {
-		SppAssignment assignData = buildAssignmentData(folderName, slaName);
-		
+	public String assignFolderToSla(String folderName, String slaName) {
+		List<String> slaNameList = new ArrayList<String>();
+		slaNameList = Arrays.asList(slaName.split(","));
+		SppAssignment assignData = buildAssignmentDataFolder(folderName, slaNameList);
 		return null;
 	}
 
@@ -256,26 +268,59 @@ public class SppServiceImpl implements SppService {
 	}
 	
 	
-	private SppAssignment buildAssignmentData(String vmName, List<String> slaName) {
+	private SppAssignment buildAssignmentDataVm(String vmName, List<String> slaNameList) {
 		SppAssignment assignData = new SppAssignment();
-		assignData.setResources(buildResourceData(vmName));
-		assignData.setSlapolicies(buildSlaData(slaName));
+		assignData.setResources(buildResourceDataVm(vmName));
+		assignData.setSlapolicies(buildSlaData(slaNameList));
 		return assignData;
 	}
 	
-	private List<SppAssignmentResources> buildResourceData(String vmName) {
+	private List<SppAssignmentResources> buildResourceDataVm(String vmName) {
+		List<SppAssignmentResources> assignmentResources = new ArrayList<SppAssignmentResources>();
+		String sppVm = getSppVmInfo(vmName);
+		JsonObject sppVmJson = (JsonObject)new JsonParser().parse(sppVm);
+		SppAssignmentResources resource = new SppAssignmentResources();
+		resource.setId(sppVmJson.get("id").getAsString());
+		resource.setMetadataPath(sppVmJson.get("metadataPath").getAsString());
+		resource.setHref(sppVmJson.get("links").getAsJsonObject().get("self")
+				.getAsJsonObject().get("href").getAsString());
+		assignmentResources.add(resource);
+		return assignmentResources;
+	}
+	
+	private List<SppAssignmentSlapols> buildSlaData(List<String> slaNameList) {
+		List<SppAssignmentSlapols> assignmentSlas = new ArrayList<SppAssignmentSlapols>();
+		String sppSlas = getSlaPolicies();
+		JsonObject sppSlaJson = (JsonObject)new JsonParser().parse(sppSlas);
+		JsonArray sppSlaArray = (JsonArray) sppSlaJson.get("slapolicies");
+		for (int i=0;i<sppSlaArray.size();i++) {
+			JsonObject sla = sppSlaArray.get(i).getAsJsonObject();
+			String slaName = sla.get("name").getAsString();
+			if (slaNameList.contains(slaName)) {
+				// not deserializing directly because of nested href value
+				SppAssignmentSlapols sppAssignSla = new SppAssignmentSlapols();
+				sppAssignSla.setId(sla.get("id").getAsString());
+				sppAssignSla.setName(sla.get("name").getAsString());
+				sppAssignSla.setHref(sla.get("links").getAsJsonObject().get("self")
+						.getAsJsonObject().get("href").getAsString());
+				assignmentSlas.add(sppAssignSla);
+			}
+		}
+		return assignmentSlas;
+	}
+	
+	private SppAssignment buildAssignmentDataFolder(String folderName, List<String> slaNameList) {
+		SppAssignment assignData = new SppAssignment();
+		assignData.setResources(buildResourceDataFolder(folderName));
+		assignData.setSlapolicies(buildSlaData(slaNameList));
+		return assignData;
+	}
+	
+	private List<SppAssignmentResources> buildResourceDataFolder(String folderName) {
 		List<SppAssignmentResources> assignmentResources = new ArrayList<SppAssignmentResources>();
 		// Determine if passed String represents vm or folder (may be better to do this elsewhere)
 		// Get resource data from SPP, deserialize and add to list		
 		return assignmentResources;
-	}
-	
-	private List<SppAssignmentSlapols> buildSlaData(List<String> slaName) {
-		List<SppAssignmentSlapols> assignmentSlas = new ArrayList<SppAssignmentSlapols>();
-		// Get list of SLA pols from SPP server
-		// Iterate over list of slaName parameters and compare with list of policies
-		// If found deserialize to SppAssignmentSlapols object and add to list
-		return assignmentSlas;
 	}
 
 }

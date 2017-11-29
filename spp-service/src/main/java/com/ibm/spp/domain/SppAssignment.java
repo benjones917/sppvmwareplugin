@@ -7,9 +7,9 @@ import com.google.gson.annotations.Expose;
 public class SppAssignment {
 	
 	@Expose
-	public static final String subtype = "vmware";
+	public final String subtype = "vmware";
 	@Expose
-	public static final String version = "1.0";
+	public final String version = "1.0";
 	
 	@Expose
 	public List<SppAssignmentResources> resources;
@@ -42,11 +42,11 @@ public class SppAssignment {
 		this.slapolicies = slapolicies;
 	}
 
-	public static String getSubtype() {
+	public String getSubtype() {
 		return subtype;
 	}
 
-	public static String getVersion() {
+	public String getVersion() {
 		return version;
 	}
 	

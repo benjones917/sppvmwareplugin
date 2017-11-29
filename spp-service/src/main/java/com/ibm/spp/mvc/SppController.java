@@ -65,24 +65,28 @@ public class SppController {
 	
 	@RequestMapping(value = "/vm", method = RequestMethod.GET)
 	@ResponseBody
-	public String getSppVmInfo(@RequestParam(value = "vmName", required = true) String vmName) 
+	public String getSppVmInfo(@RequestParam(value = "vm", required = true) String vm) 
 			throws Exception {
-		String vmInfo = _sppService.getSppVmInfo(vmName);
+		String vmInfo = _sppService.getSppVmInfo(vm);
 		return vmInfo;
 	}
 	
+	//sla String parameter represents a list of SLA policies
 	@RequestMapping(value = "/assignvm", method = RequestMethod.POST)
 	@ResponseBody
 	public String assignVmToSla(@RequestParam(value = "vm", required = true) String vm,
 			@RequestParam(value = "sla", required = true) String sla) throws Exception {
-		return null;
+		String vmAssignment = _sppService.assignVmToSla(vm, sla);
+		return vmAssignment;
 	}
 	
+	//sla String parameter represents a list of SLA policies
 	@RequestMapping(value = "/assignfolder", method = RequestMethod.POST)
 	@ResponseBody
 	public String assignFolderToSla(@RequestParam(value = "folder", required = true) String folder,
 			@RequestParam(value = "sla", required = true) String sla) throws Exception {
-		return null;
+		String folderAssignment = _sppService.assignFolderToSla(folder, sla);
+		return folderAssignment;
 	}
 
 	@ExceptionHandler(Exception.class)
