@@ -3,11 +3,10 @@
 * __Back end todo:__
 * Improve logging and exception handling
 * Controller and service methods needed:
-  * Method to build POST data for VM/SLA association
-  * Method to associate VM from SLA
-  * Method of de-associate VM from SLA
+  * Method to build POST data for Folder/SLA associaton
+  * Method to associate VM with SLA (POST call all that's left)
 * Refactor so everything isn't in one service class (if need be)
-* Ensure strategy of "login, make sppcall, logout" for each needed API call to SPP is viable
+* Determine if there is a better way than using search API to get VM by name (internal vSphere ID match with SPP?)
 
 * __Front end todo:__
 * Seperate registration screen or dialog
