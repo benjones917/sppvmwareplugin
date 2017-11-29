@@ -77,6 +77,13 @@ public class SppController {
 			@RequestParam(value = "sla", required = true) String sla) throws Exception {
 		return null;
 	}
+	
+	@RequestMapping(value = "/assignfolder", method = RequestMethod.POST)
+	@ResponseBody
+	public String assignFolderToSla(@RequestParam(value = "folder", required = true) String folder,
+			@RequestParam(value = "sla", required = true) String sla) throws Exception {
+		return null;
+	}
 
 	@ExceptionHandler(Exception.class)
 	   @ResponseBody

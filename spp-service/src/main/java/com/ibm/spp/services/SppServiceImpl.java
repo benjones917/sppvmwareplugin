@@ -146,16 +146,24 @@ public class SppServiceImpl implements SppService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		log.error("Error getting config");
 		return null;
 	}
 
 	// Assign sla policy to vm
-	// Takes a list of VM and SLA policy names
-	// Controller should pass in this list from UI
+	// Takes a String of VM and List of String SLA policy names
 	// UI should pass in any existing SLA policy names that aren't removed
 	@Override
-	public String assignVmsToSla(List<String> vmName, List<String> slaName) {
+	public String assignVmToSla(String vmName, List<String> slaName) {
 		SppAssignment assignData = buildAssignmentData(vmName, slaName);
+		
+		return null;
+	}
+	
+	// Same as above but for folder
+	@Override 
+	public String assignFolderToSla(String folderName, List<String> slaName) {
+		SppAssignment assignData = buildAssignmentData(folderName, slaName);
 		
 		return null;
 	}
@@ -248,17 +256,17 @@ public class SppServiceImpl implements SppService {
 	}
 	
 	
-	private SppAssignment buildAssignmentData(List<String> vmName, List<String> slaName) {
+	private SppAssignment buildAssignmentData(String vmName, List<String> slaName) {
 		SppAssignment assignData = new SppAssignment();
 		assignData.setResources(buildResourceData(vmName));
 		assignData.setSlapolicies(buildSlaData(slaName));
 		return assignData;
 	}
 	
-	private List<SppAssignmentResources> buildResourceData(List<String> vmName) {
+	private List<SppAssignmentResources> buildResourceData(String vmName) {
 		List<SppAssignmentResources> assignmentResources = new ArrayList<SppAssignmentResources>();
-		// Iterate over list of vmNames and call getSppVmInfo for each name
-		// Deserialize to SppAssignmentResources object and add to list
+		// Determine if passed String represents vm or folder (may be better to do this elsewhere)
+		// Get resource data from SPP, deserialize and add to list		
 		return assignmentResources;
 	}
 	
