@@ -129,10 +129,14 @@ public class SppServiceImpl implements SppService {
 			sppLogOut(regInfo.getSppHost(), session);
 			JsonObject sppVmJsonAll = (JsonObject)new JsonParser().parse(responseString);
 			JsonArray sppVmJsonArray = (JsonArray) sppVmJsonAll.get("vms");
-			// we use search API but return first result
-			// may need to change this approach as it could cause issues with wrong VM being updated
-			String vmString = sppVmJsonArray.get(0).toString();
-			return vmString;
+			// need to loop thru results here as search API could return more than one match
+			for (int i=0;i<sppVmJsonArray.size();i++) {
+				JsonObject vm = sppVmJsonArray.get(i).getAsJsonObject();
+				String vmNameFromSearch = vm.get("name").getAsString();
+				if(vmNameFromSearch.equals(vmName)) {
+					return sppVmJsonArray.get(i).toString();
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -167,11 +171,14 @@ public class SppServiceImpl implements SppService {
 			sppLogOut(regInfo.getSppHost(), session);
 			JsonObject sppFolderJsonAll = (JsonObject) new JsonParser().parse(responseString);
 			JsonArray sppFolderJsonArray = (JsonArray) sppFolderJsonAll.get("folders");
-			// we use search API but return first result
-			// may need to change this approach as it could cause issues with
-			// wrong VM being updated
-			String folderString = sppFolderJsonArray.get(0).toString();
-			return folderString;
+			// need loop here to match name exactly in case search returns multiple results
+			for (int i=0;i<sppFolderJsonArray.size();i++) {
+				JsonObject vm = sppFolderJsonArray.get(i).getAsJsonObject();
+				String vmNameFromSearch = vm.get("name").getAsString();
+				if(vmNameFromSearch.equals(folderName)) {
+					return sppFolderJsonArray.get(i).toString();
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

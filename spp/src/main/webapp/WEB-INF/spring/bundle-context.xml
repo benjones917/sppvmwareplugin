@@ -36,35 +36,18 @@
 
 
    <!-- Standard controller beans: you can modify them if necessary -->
-
-   <bean name="servicesController" class="com.ibm.spp.mvc.ServicesController" />
    
    <bean name="sppController" class="com.ibm.spp.mvc.SppController" />
-
-   <bean name="dataAccessController" class="com.ibm.spp.mvc.DataAccessController" />
-
-   <bean name="actionsController" class="com.ibm.spp.mvc.ActionsController" />
 
 
    <!-- OSGI references to platform services used by the controllers -->
 
-   <osgi:reference id="dataService"
-         interface="com.vmware.vise.data.query.DataService" />
-
-   <osgi:reference id="objectReferenceService"
-         interface="com.vmware.vise.data.query.ObjectReferenceService" />
 
 
    <!-- OSGI references to your services used by the controllers -->
 
-   <osgi:reference id="echoService"
-         interface="com.ibm.spp.services.EchoService" />
-
 	<osgi:reference id="sppService"
          interface="com.ibm.spp.services.SppService" />
-
-   <osgi:reference id="sampleActionService"
-         interface="com.ibm.spp.services.SampleActionService" />
 
 
 </beans>
