@@ -12,7 +12,6 @@
       testing of the bundle outside of an OSGi container -->
 
    <!-- Services defined by this module   -->
-
          
    <osgi:service id="SppService" ref="SppServiceImpl"
          interface="com.ibm.spp.services.SppService" />
