@@ -1,7 +1,5 @@
 package com.ibm.spp.services;
 
-import java.util.List;
-
 import com.ibm.spp.domain.RegistrationInfo;
 
 public interface SppService {
@@ -16,4 +14,6 @@ public interface SppService {
 	String assignVmToSla(String vmName, String slaName);
 
 	String assignFolderToSla(String folderName, String slaName);
+
+	String getSppFolderInfo(String folderName);
 }

@@ -71,6 +71,14 @@ public class SppController {
 		return vmInfo;
 	}
 	
+	@RequestMapping(value = "/folder", method = RequestMethod.GET)
+	@ResponseBody
+	public String getSppFolderInfo(@RequestParam(value = "folder", required = true) String folder) 
+			throws Exception {
+		String folderInfo = _sppService.getSppFolderInfo(folder);
+		return folderInfo;
+	}
+	
 	//sla String parameter represents a list of SLA policies
 	@RequestMapping(value = "/assignvm", method = RequestMethod.POST)
 	@ResponseBody

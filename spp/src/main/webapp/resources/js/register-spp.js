@@ -24,14 +24,42 @@ $(document).ready(
 			
 			$('#getvminfotest').click(function () {
 				var $vmreq = $.get(PluginUtil.getWebContextPath()
-						+ "/rest/spp/vm", "vm=BCJVM1", function(data) {
+						+ "/rest/spp/vm", "vm=BCJ-LINUX", function(data) {
 					alert(data);
 				})
 			});
 			
-			$('#assigntest').click(function () {
+			$('#getfolderinfotest').click(function () {
+				var $vmreq = $.get(PluginUtil.getWebContextPath()
+						+ "/rest/spp/folder", "folder=BCJ-SPP", function(data) {
+					alert(data);
+				})
+			});
+			
+			$('#assignvmtest').click(function () {
 				var $assreq = $.post(PluginUtil.getWebContextPath()
-						+ "/rest/spp/assignvm", "vm=BCJVM1&sla=Gold,Silver", function(data) {
+						+ "/rest/spp/assignvm", "vm=BCJ-LINUX&sla=Gold,Silver", function(data) {
+					alert(data);
+				})
+			});
+			
+			$('#unassignvmtest').click(function () {
+				var $assreq = $.post(PluginUtil.getWebContextPath()
+						+ "/rest/spp/assignvm", "vm=BCJ-LINUX&sla=", function(data) {
+					alert(data);
+				})
+			});
+			
+			$('#assignfoldertest').click(function () {
+				var $assreq = $.post(PluginUtil.getWebContextPath()
+						+ "/rest/spp/assignfolder", "folder=BCJ-SPP&sla=Silver,Bronze", function(data) {
+					alert(data);
+				})
+			});
+			
+			$('#unassignfoldertest').click(function () {
+				var $assreq = $.post(PluginUtil.getWebContextPath()
+						+ "/rest/spp/assignfolder", "folder=BCJ-SPP&sla=", function(data) {
 					alert(data);
 				})
 			});

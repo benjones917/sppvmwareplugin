@@ -92,7 +92,9 @@ public class SppServiceImpl implements SppService {
 			String responseString = EntityUtils.toString(entity, "UTF-8");
 			log.info("Returning SLA Policies from SPP");
 			sppLogOut(regInfo.getSppHost(), session);
-			return responseString;
+			JsonObject slaJsonAll = (JsonObject) new JsonParser().parse(responseString);
+			JsonArray slaJsonArray = (JsonArray) slaJsonAll.get("slapolicies");
+			return slaJsonArray.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -139,6 +141,45 @@ public class SppServiceImpl implements SppService {
 		return "Error getting VM Info";
 	}
 
+	// Get JSON for FOLDER data from SPP
+	// Uses the search API
+	// This is a POST here but a GET in our controller
+	@Override
+	public String getSppFolderInfo(String folderName) {
+		RegistrationInfo regInfo = getSppRegistrationInfo();
+		String folderUrl = regInfo.getSppHost() + SppUrls.sppFolderUrl;
+		SppSession session = sppLogIn(regInfo.getSppHost(), regInfo.getSppUser(), regInfo.getSppPass());
+		JsonObject searchJO = new JsonObject();
+		searchJO.addProperty("name", folderName);
+		searchJO.addProperty("hypervisorType", "vmware");
+		try {
+			CloseableHttpClient httpclient = createAcceptSelfSignedCertificateClient();
+			HttpPost request = new HttpPost(folderUrl);
+			request.setHeader("X-Endeavour-Sessionid", session.sessionid);
+			request.setHeader("Accept", "application/json");
+			request.setHeader("Content-Type", "application/json");
+			StringEntity body = new StringEntity(searchJO.toString());
+			request.setEntity(body);
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			String responseString = EntityUtils.toString(entity, "UTF-8");
+			log.info("Returning VM Info from SPP");
+			sppLogOut(regInfo.getSppHost(), session);
+			JsonObject sppFolderJsonAll = (JsonObject) new JsonParser().parse(responseString);
+			JsonArray sppFolderJsonArray = (JsonArray) sppFolderJsonAll.get("folders");
+			// we use search API but return first result
+			// may need to change this approach as it could cause issues with
+			// wrong VM being updated
+			String folderString = sppFolderJsonArray.get(0).toString();
+			return folderString;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.error("Error getting Folder Info from SPP");
+		sppLogOut(regInfo.getSppHost(), session);
+		return "Error getting Folder Info";
+	}
+
 	// Get SPP config data
 	// Returns as a RegistrationInfo object
 	@Override
@@ -167,8 +208,8 @@ public class SppServiceImpl implements SppService {
 		slaNameList = Arrays.asList(slaName.split(","));
 		SppAssignment assignData = buildAssignmentDataVm(vmName, slaNameList);
 		String assignBody = new Gson().toJson(assignData);
-		// do POST here to make assignment in SPP
-		return assignBody;
+		String postResponse = postAssignmentData(assignBody);
+		return postResponse;
 	}
 	
 	// Same as above but for folder
@@ -177,7 +218,37 @@ public class SppServiceImpl implements SppService {
 		List<String> slaNameList = new ArrayList<String>();
 		slaNameList = Arrays.asList(slaName.split(","));
 		SppAssignment assignData = buildAssignmentDataFolder(folderName, slaNameList);
-		return null;
+		String assignBody = new Gson().toJson(assignData);
+		String postResponse = postAssignmentData(assignBody);
+		return postResponse;
+	}
+	
+	// Do POST for folder or vm assignment
+	private String postAssignmentData(String assignBody) {
+		RegistrationInfo regInfo = getSppRegistrationInfo();
+		String assignUrl = regInfo.getSppHost() + SppUrls.sppAssignUrl;
+		SppSession session = sppLogIn(regInfo.getSppHost(), regInfo.getSppUser(), regInfo.getSppPass());
+		try {
+			CloseableHttpClient httpclient = createAcceptSelfSignedCertificateClient();
+			HttpPost request = new HttpPost(assignUrl);
+			request.setHeader("X-Endeavour-Sessionid", session.sessionid);
+			request.setHeader("Accept" ,"application/json");
+			request.setHeader("Content-Type" ,"application/json");
+			StringEntity body = new StringEntity(assignBody);
+			request.setEntity(body);
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			String responseString = EntityUtils.toString(entity, "UTF-8");
+			log.info("Assinging Resource to SLA");
+			sppLogOut(regInfo.getSppHost(), session);
+			return responseString;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.error("Error Assigning Resource to SLA");
+		log.error("Body: " + assignBody);
+		sppLogOut(regInfo.getSppHost(), session);
+		return "Error Assigning Resource to SLA";
 	}
 
 	// Gets OS dependent path for registration config file
@@ -291,8 +362,7 @@ public class SppServiceImpl implements SppService {
 	private List<SppAssignmentSlapols> buildSlaData(List<String> slaNameList) {
 		List<SppAssignmentSlapols> assignmentSlas = new ArrayList<SppAssignmentSlapols>();
 		String sppSlas = getSlaPolicies();
-		JsonObject sppSlaJson = (JsonObject)new JsonParser().parse(sppSlas);
-		JsonArray sppSlaArray = (JsonArray) sppSlaJson.get("slapolicies");
+		JsonArray sppSlaArray = (JsonArray)new JsonParser().parse(sppSlas);
 		for (int i=0;i<sppSlaArray.size();i++) {
 			JsonObject sla = sppSlaArray.get(i).getAsJsonObject();
 			String slaName = sla.get("name").getAsString();
@@ -318,9 +388,15 @@ public class SppServiceImpl implements SppService {
 	
 	private List<SppAssignmentResources> buildResourceDataFolder(String folderName) {
 		List<SppAssignmentResources> assignmentResources = new ArrayList<SppAssignmentResources>();
-		// Determine if passed String represents vm or folder (may be better to do this elsewhere)
-		// Get resource data from SPP, deserialize and add to list		
-		return assignmentResources;
+		String sppFolder = getSppFolderInfo(folderName);
+		JsonObject sppFolderJson = (JsonObject)new JsonParser().parse(sppFolder);
+		SppAssignmentResources resource = new SppAssignmentResources();
+		resource.setId(sppFolderJson.get("id").getAsString());
+		resource.setMetadataPath(sppFolderJson.get("metadataPath").getAsString());
+		resource.setHref(sppFolderJson.get("links").getAsJsonObject().get("self")
+				.getAsJsonObject().get("href").getAsString());
+		assignmentResources.add(resource);
+		return assignmentResources;	
 	}
 
 }
