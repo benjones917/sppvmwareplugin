@@ -1,16 +1,13 @@
 package com.ibm.spp.services;
 
-import java.util.List;
-
-import com.ibm.spp.domain.SppAssignment;
-import com.ibm.spp.domain.SppAssignmentResources;
+import com.ibm.spp.domain.SppSession;
 
 public interface SppAssignmentService {
 
-	String postAssignmentData(String assignBody);
+	String assignFolderToSla(String folderName, String slaName, SppSession session);
 
-	SppAssignment buildAssignmentDataVm(String vmName, List<String> slaNameList);
+	String assignVmToSla(String vmName, String slaName, SppSession session);
 
-	SppAssignment buildAssignmentDataFolder(String folderName, List<String> slaNameList);
+	
 
 }

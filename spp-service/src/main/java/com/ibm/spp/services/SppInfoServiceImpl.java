@@ -28,10 +28,8 @@ public class SppInfoServiceImpl implements SppInfoService {
 	
 	// Get JSON for all SLA policies in SPP
 	@Override
-	public String getSlaPolicies() {
-		RegistrationInfo regInfo = sppRegistrationService.getSppRegistrationInfo();
-		String slaUrl = regInfo.getSppHost() + SppUrls.sppSlaUrl;
-		SppSession session = sppRegistrationService.sppLogIn(regInfo.getSppHost(), regInfo.getSppUser(), regInfo.getSppPass());
+	public String getSlaPolicies(SppSession session) {
+		String slaUrl = session.getHost() + SppUrls.sppSlaUrl;
 		try {
 			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
 			HttpUriRequest request = RequestBuilder.get().setUri(slaUrl).build();
@@ -40,7 +38,6 @@ public class SppInfoServiceImpl implements SppInfoService {
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
 			log.info("Returning SLA Policies from SPP");
-			sppRegistrationService.sppLogOut(regInfo.getSppHost(), session);
 			JsonObject slaJsonAll = (JsonObject) new JsonParser().parse(responseString);
 			JsonArray slaJsonArray = (JsonArray) slaJsonAll.get("slapolicies");
 			return slaJsonArray.toString();
@@ -48,7 +45,6 @@ public class SppInfoServiceImpl implements SppInfoService {
 			e.printStackTrace();
 		}
 		log.error("Error getting SLA Policies from SPP");
-		sppRegistrationService.sppLogOut(regInfo.getSppHost(), session);
 		return "Error getting SLA Policies";
 	}
 
@@ -56,10 +52,8 @@ public class SppInfoServiceImpl implements SppInfoService {
 	// Uses the search API
 	// This is a POST here but a GET in our controller
 	@Override
-	public String getSppVmInfo(String vmName) {
-		RegistrationInfo regInfo = sppRegistrationService.getSppRegistrationInfo();
-		String vmUrl = regInfo.getSppHost() + SppUrls.sppVmUrl;
-		SppSession session = sppRegistrationService.sppLogIn(regInfo.getSppHost(), regInfo.getSppUser(), regInfo.getSppPass());
+	public String getSppVmInfo(String vmName, SppSession session) {
+		String vmUrl = session.getHost() + SppUrls.sppVmUrl;
 		JsonObject searchJO = new JsonObject();
 		searchJO.addProperty("name", vmName);
 		searchJO.addProperty("hypervisorType", "vmware");
@@ -75,7 +69,6 @@ public class SppInfoServiceImpl implements SppInfoService {
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
 			log.info("Returning VM Info from SPP");
-			sppRegistrationService.sppLogOut(regInfo.getSppHost(), session);
 			JsonObject sppVmJsonAll = (JsonObject) new JsonParser().parse(responseString);
 			JsonArray sppVmJsonArray = (JsonArray) sppVmJsonAll.get("vms");
 			// need to loop thru results here as search API could return more
@@ -91,7 +84,6 @@ public class SppInfoServiceImpl implements SppInfoService {
 			e.printStackTrace();
 		}
 		log.error("Error getting VM Info from SPP");
-		sppRegistrationService.sppLogOut(regInfo.getSppHost(), session);
 		return "Error getting VM Info";
 	}
 
@@ -99,10 +91,8 @@ public class SppInfoServiceImpl implements SppInfoService {
 	// Uses the search API
 	// This is a POST here but a GET in our controller
 	@Override
-	public String getSppFolderInfo(String folderName) {
-		RegistrationInfo regInfo = sppRegistrationService.getSppRegistrationInfo();
-		String folderUrl = regInfo.getSppHost() + SppUrls.sppFolderUrl;
-		SppSession session = sppRegistrationService.sppLogIn(regInfo.getSppHost(), regInfo.getSppUser(), regInfo.getSppPass());
+	public String getSppFolderInfo(String folderName, SppSession session) {
+		String folderUrl = session.getHost() + SppUrls.sppFolderUrl;
 		JsonObject searchJO = new JsonObject();
 		searchJO.addProperty("name", folderName);
 		searchJO.addProperty("hypervisorType", "vmware");
@@ -118,7 +108,6 @@ public class SppInfoServiceImpl implements SppInfoService {
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
 			log.info("Returning VM Info from SPP");
-			sppRegistrationService.sppLogOut(regInfo.getSppHost(), session);
 			JsonObject sppFolderJsonAll = (JsonObject) new JsonParser().parse(responseString);
 			JsonArray sppFolderJsonArray = (JsonArray) sppFolderJsonAll.get("folders");
 			// need loop here to match name exactly in case search returns
@@ -134,7 +123,6 @@ public class SppInfoServiceImpl implements SppInfoService {
 			e.printStackTrace();
 		}
 		log.error("Error getting Folder Info from SPP");
-		sppRegistrationService.sppLogOut(regInfo.getSppHost(), session);
 		return "Error getting Folder Info";
 	}
 }

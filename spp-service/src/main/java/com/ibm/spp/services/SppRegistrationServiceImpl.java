@@ -31,33 +31,6 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 	
 	private static final Log log =
 	         LogFactory.getLog(SppServiceImpl.class);
-
-	// Gets OS dependent path for registration config file
-	private String getRegistrationInfoPath() {
-		String path;
-		if (SystemUtils.IS_OS_WINDOWS) {
-			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\spp";
-		} else if (SystemUtils.IS_OS_MAC) {
-			path = "/var/lib/spp";
-		} else {
-			path = "/storage/spp";
-		}
-		return path;
-	}
-
-	// Gets OS dependent full path for registration config file (includes
-	// filename)
-	private String getRegistrationInfoFilePath() {
-		String path;
-		if (SystemUtils.IS_OS_WINDOWS) {
-			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\spp\\regInfo.config";
-		} else if (SystemUtils.IS_OS_MAC) {
-			path = "/var/lib/spp/regInfo.config";
-		} else {
-			path = "/storage/spp/regInfo.config";
-		}
-		return path;
-	}
 	
 	// Get SPP config data
 	// Returns as a RegistrationInfo object
@@ -104,9 +77,9 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 	// Returns SppSession object containing the session id for other SPP API
 	// requests
 	@Override
-	public SppSession sppLogIn(String host, String user, String pass) {
-		String sppSesUrl = host + SppUrls.sppSessionUrl;
-		String userPassText = user + ":" + pass;
+	public SppSession sppLogIn(RegistrationInfo regInfo) {
+		String sppSesUrl = regInfo.getSppHost() + SppUrls.sppSessionUrl;
+		String userPassText = regInfo.getSppUser() + ":" + regInfo.getSppPass();
 		String b64UserPass = new String(Base64.getEncoder().encode(userPassText.getBytes()));
 		try {
 			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
@@ -116,6 +89,8 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 			HttpEntity entity = response.getEntity();
 			String responseString = EntityUtils.toString(entity, "UTF-8");
 			SppSession sppSession = new Gson().fromJson(responseString, SppSession.class);
+			sppSession.setHost(regInfo.getSppHost());
+			sppSession.setUser(regInfo.getSppUser());
 			log.info("Logged in to SPP");
 			return sppSession;
 		} catch (Exception e) {
@@ -127,8 +102,8 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 
 	// Logs out of SPP
 	@Override
-	public void sppLogOut(String host, SppSession session) {
-		String sppSesUrl = host + SppUrls.sppSessionUrl;
+	public void sppLogOut(SppSession session) {
+		String sppSesUrl = session.getHost() + SppUrls.sppSessionUrl;
 		String sesIdHdr = session.getSessionId();
 		try {
 			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
@@ -141,5 +116,32 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	// Gets OS dependent path for registration config file
+	private String getRegistrationInfoPath() {
+		String path;
+		if (SystemUtils.IS_OS_WINDOWS) {
+			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\spp";
+		} else if (SystemUtils.IS_OS_MAC) {
+			path = "/var/lib/spp";
+		} else {
+			path = "/storage/spp";
+		}
+		return path;
+	}
+
+	// Gets OS dependent full path for registration config file (includes
+	// filename)
+	private String getRegistrationInfoFilePath() {
+		String path;
+		if (SystemUtils.IS_OS_WINDOWS) {
+			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\spp\\regInfo.config";
+		} else if (SystemUtils.IS_OS_MAC) {
+			path = "/var/lib/spp/regInfo.config";
+		} else {
+			path = "/storage/spp/regInfo.config";
+		}
+		return path;
 	}
 }
