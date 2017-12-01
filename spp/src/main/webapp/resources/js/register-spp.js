@@ -63,6 +63,13 @@ $(document).ready(
 					alert(data);
 				})
 			});
+			
+			$('#restorevmtest').click(function () {
+				var $assreq = $.post(PluginUtil.getWebContextPath()
+						+ "/rest/spp/restore/latest/test", "vm=BCJ-LINUX", function(data) {
+					alert(data);
+				})
+			});
 		});
 
 function populate(frm, data) {
