@@ -16,4 +16,6 @@ public interface SppService {
 	String assignFolderToSla(String folderName, String slaName);
 
 	String getSppFolderInfo(String folderName);
+
+	String restoreLatestVmTest(String vmName);
 }

@@ -24,8 +24,6 @@ public class SppInfoServiceImpl implements SppInfoService {
 	
 	private static final Log log = LogFactory.getLog(SppInfoServiceImpl.class);
 	
-	SppRegistrationService sppRegistrationService = new SppRegistrationServiceImpl();
-	
 	// Get JSON for all SLA policies in SPP
 	@Override
 	public String getSlaPolicies(SppSession session) {

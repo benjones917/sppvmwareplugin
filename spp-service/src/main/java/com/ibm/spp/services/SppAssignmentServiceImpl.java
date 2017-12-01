@@ -31,7 +31,6 @@ public class SppAssignmentServiceImpl implements SppAssignmentService {
 
 	private static final Log log = LogFactory.getLog(SppAssignmentServiceImpl.class);
 
-	SppRegistrationService sppRegistrationService = new SppRegistrationServiceImpl();
 	SppInfoService sppInfoService = new SppInfoServiceImpl();
 
 	// Assign sla policy to vm

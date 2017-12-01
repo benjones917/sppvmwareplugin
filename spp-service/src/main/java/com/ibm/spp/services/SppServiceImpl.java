@@ -13,6 +13,7 @@ public class SppServiceImpl implements SppService {
 	SppRegistrationService sppRegistrationService = new SppRegistrationServiceImpl();
 	SppInfoService sppInfoService = new SppInfoServiceImpl();
 	SppAssignmentService sppAssignmentService = new SppAssignmentServiceImpl();
+	SppRestoreService sppRestoreService = new SppRestoreServiceImpl();
 	
 	// Main function to register SPP
 	// Saving of registration is dependent on successful login
@@ -73,6 +74,14 @@ public class SppServiceImpl implements SppService {
 		String assignFolder = sppAssignmentService.assignFolderToSla(folderName, slaName, session);
 		deleteSppSession(session);
 		return assignFolder;
+	}
+	
+	@Override
+	public String restoreLatestVmTest(String vmName) {
+		SppSession session = createSppSession();
+		String restoreVm = sppRestoreService.restoreLatestVmTest(vmName, session);
+		deleteSppSession(session);
+		return restoreVm;
 	}
 	
 	private SppSession createSppSession() {
