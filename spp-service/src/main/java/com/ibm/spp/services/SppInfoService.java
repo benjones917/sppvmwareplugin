@@ -10,4 +10,6 @@ public interface SppInfoService {
 
 	String getSppFolderInfo(String folderName, SppSession session);
 
+	String getSppVmInfoForRestore(String vmName, SppSession session);
+
 }

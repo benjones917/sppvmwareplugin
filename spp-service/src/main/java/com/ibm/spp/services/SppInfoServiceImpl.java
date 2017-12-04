@@ -84,6 +84,43 @@ public class SppInfoServiceImpl implements SppInfoService {
 		log.error("Error getting VM Info from SPP");
 		return "Error getting VM Info";
 	}
+	
+	// Same as above but uses restore clause in url
+	@Override
+	public String getSppVmInfoForRestore(String vmName, SppSession session) {
+		String vmUrl = session.getHost() + SppUrls.sppVmRestoreUrl;
+		JsonObject searchJO = new JsonObject();
+		searchJO.addProperty("name", vmName);
+		searchJO.addProperty("hypervisorType", "vmware");
+		try {
+			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
+			HttpPost request = new HttpPost(vmUrl);
+			request.setHeader("X-Endeavour-Sessionid", session.sessionid);
+			request.setHeader("Accept", "application/json");
+			request.setHeader("Content-Type", "application/json");
+			StringEntity body = new StringEntity(searchJO.toString());
+			request.setEntity(body);
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			String responseString = EntityUtils.toString(entity, "UTF-8");
+			log.info("Returning VM Info from SPP");
+			JsonObject sppVmJsonAll = (JsonObject) new JsonParser().parse(responseString);
+			JsonArray sppVmJsonArray = (JsonArray) sppVmJsonAll.get("vms");
+			// need to loop thru results here as search API could return more
+			// than one match
+			for (int i = 0; i < sppVmJsonArray.size(); i++) {
+				JsonObject vm = sppVmJsonArray.get(i).getAsJsonObject();
+				String vmNameFromSearch = vm.get("name").getAsString();
+				if (vmNameFromSearch.equals(vmName)) {
+					return sppVmJsonArray.get(i).toString();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.error("Error getting VM Info from SPP");
+		return "Error getting VM Info";
+	}
 
 	// Get JSON for FOLDER data from SPP
 	// Uses the search API
