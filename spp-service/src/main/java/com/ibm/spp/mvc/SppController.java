@@ -104,6 +104,14 @@ public class SppController {
 		String vmRestore = _sppService.restoreLatestVmTest(vm);
 		return vmRestore;
 	}
+	
+	// get active restore sessions from SPP
+	@RequestMapping(value = "/activerestores", method = RequestMethod.GET)
+	@ResponseBody
+	public String getActiveRestores() throws Exception {
+		String restoreSessions = _sppService.getSppActiveRestoreSessions();
+		return restoreSessions;
+	}
 
 	@ExceptionHandler(Exception.class)
 	@ResponseBody

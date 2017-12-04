@@ -84,6 +84,14 @@ public class SppServiceImpl implements SppService {
 		return restoreVm;
 	}
 	
+	@Override
+	public String getSppActiveRestoreSessions() {
+		SppSession session = createSppSession();
+		String activeSessions = sppInfoService.getSppActiveRestoreSessions(session);
+		deleteSppSession(session);
+		return activeSessions;
+	}
+	
 	private SppSession createSppSession() {
 		RegistrationInfo regInfo = getSppRegistrationInfo();
 		return sppRegistrationService.sppLogIn(regInfo);

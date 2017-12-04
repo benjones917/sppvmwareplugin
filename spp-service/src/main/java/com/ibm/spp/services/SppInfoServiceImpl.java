@@ -160,4 +160,25 @@ public class SppInfoServiceImpl implements SppInfoService {
 		log.error("Error getting Folder Info from SPP");
 		return "Error getting Folder Info";
 	}
+	
+	@Override
+	public String getSppActiveRestoreSessions(SppSession session) {
+		String restoreSessionUrl = SppUrls.sppJobSessionUrl;
+		try {
+			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
+			HttpUriRequest request = RequestBuilder.get().setUri(restoreSessionUrl).build();
+			request.setHeader("X-Endeavour-Sessionid", session.sessionid);
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			String responseString = EntityUtils.toString(entity, "UTF-8");
+			log.info("Returning Active Restore Sessions from SPP");
+			JsonObject responseJsonAll = (JsonObject) new JsonParser().parse(responseString);
+			JsonArray responseSessions = (JsonArray) responseJsonAll.get("sessions");
+			return responseSessions.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.error("Error getting Active Restore Sessions from SPP");
+		return "Error getting Active Restore Sessions";
+	}
 }

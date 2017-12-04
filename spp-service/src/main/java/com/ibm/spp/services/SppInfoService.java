@@ -12,4 +12,6 @@ public interface SppInfoService {
 
 	String getSppVmInfoForRestore(String vmName, SppSession session);
 
+	String getSppActiveRestoreSessions(SppSession session);
+
 }

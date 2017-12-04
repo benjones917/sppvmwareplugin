@@ -18,4 +18,6 @@ public interface SppService {
 	String getSppFolderInfo(String folderName);
 
 	String restoreLatestVmTest(String vmName);
+
+	String getSppActiveRestoreSessions();
 }
