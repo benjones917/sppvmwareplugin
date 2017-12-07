@@ -1,6 +1,12 @@
 /* Copyright (c) 2012-2017 VMware, Inc. All rights reserved. */
 @CHARSET "US-ASCII";
 body {
-   font-size: 12px;
-   font-family: Arial;
+   font-size: 14px;
+   font-family: Metropolis,"Avenir Next","Helvetica Neue",Arial,sans-serif;
+   color:#565656;
+}
+
+.pure-form legend {
+	font-size: 14px; 
+	color:#565656;
 }
