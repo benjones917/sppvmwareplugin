@@ -9,7 +9,7 @@ $(document).ready(function() {
 	if (!targets) {
 		return;
 	}
-	var test = getUniqueID(targets,"VirtualMachine");
+
 	// Set Asynchronous to false to allow all requests to complete before moving to next step
 	$.ajaxSetup({
 	    async: false
