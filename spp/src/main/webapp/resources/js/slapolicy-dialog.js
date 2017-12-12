@@ -1,8 +1,10 @@
 $(document).ready(function() {
 	
 	// Set variables
-	var vmName;
-	var selectedVM;
+	var selectedName;
+	var selectedOptions;
+	var selectedType;
+	var folderFlag = false;
 	
 	// Get current objectID
 	var targets = WEB_PLATFORM.getActionTargets();
@@ -16,20 +18,31 @@ $(document).ready(function() {
 	});
 	
 	// Get the VM name using the VMware object ID
-	var dataUrl = '/ui/data/properties/' + targets + '?properties=name';
+	var dataUrl = '/ui/data/properties/' + targets + '?properties=name,childType';
 	$.getJSON(dataUrl, function (data) {
         // data object contains the properties listed above
-        vmName = data.name;
+		if(data.childType != null) {
+			selectedType = 'folder';
+	    }else{
+	    	selectedType = 'vm';
+	    }
+		selectedName = data.name;
     });
-	
+
 	// Get the VM data from SPP
 	var $vmreq = $.get(PluginUtil.getWebContextPath()
-			+ "/rest/spp/vm", "vm="+vmName, function(data) {
-			selectedVM = JSON.parse(data);
+			+ "/rest/spp/" + selectedType, selectedType+"="+selectedName, function(data) {
+			selectedOptions = JSON.parse(data);
 	})
 	
-	$("#vmNameText").append(document.createTextNode(vmName));
-	$("#hiddenVMName").val(vmName);
+	$("#objectNameText").append(document.createTextNode(selectedName));
+	if(selectedType == 'vm'){
+		$("#objectTypeText").append("virtual machine");
+	}else{
+		$("#objectTypeText").append("folder");
+	}
+	$("#hiddenObjectName").val(selectedName);
+	$("#hiddenObjectName").attr("name",selectedType);
 	
 	// Get all SLA policies and select all that are enabled for specific VM
 	var $slareq = $.getJSON(PluginUtil.getWebContextPath()
@@ -50,7 +63,7 @@ $(document).ready(function() {
 						forAtt.value = "sla-" + data[i].name          
 						label.setAttributeNode(forAtt); 
 						
-						if($.inArray(data[i].name, selectedVM.storageProfiles) >= 0){
+						if($.inArray(data[i].name, selectedOptions.storageProfiles) >= 0){
 							checkbox.checked = true;
 						}
 						
@@ -69,7 +82,7 @@ $(document).ready(function() {
 			}
 
 			var $assreq = $.post(PluginUtil.getWebContextPath()
-					+ "/rest/spp/assignvm", params, function(data) {
+					+ "/rest/spp/assign" + selectedType, params, function(data) {
 				console.log(data);
 			})
 			WEB_PLATFORM.closeDialog();
