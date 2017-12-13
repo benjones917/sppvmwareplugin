@@ -163,7 +163,7 @@ public class SppInfoServiceImpl implements SppInfoService {
 	
 	@Override
 	public String getSppActiveRestoreSessions(SppSession session) {
-		String restoreSessionUrl = SppUrls.sppJobSessionUrl;
+		String restoreSessionUrl = session.getHost() + SppUrls.sppJobSessionUrl;
 		try {
 			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
 			HttpUriRequest request = RequestBuilder.get().setUri(restoreSessionUrl).build();
@@ -180,5 +180,53 @@ public class SppInfoServiceImpl implements SppInfoService {
 		}
 		log.error("Error getting Active Restore Sessions from SPP");
 		return "Error getting Active Restore Sessions";
+	}
+
+	@Override
+	public String getDashboardInfo(SppSession session) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getSppVmVersions(SppSession session, String vmid, String hvid) {
+		String vmVersUrl = session.getHost() + SppUrls.sppVmVersionUrl.replace("HVID", hvid).replaceAll("VMID", vmid);
+		try {
+			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
+			HttpUriRequest request = RequestBuilder.get().setUri(vmVersUrl).build();
+			request.setHeader("X-Endeavour-Sessionid", session.sessionid);
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			String responseString = EntityUtils.toString(entity, "UTF-8");
+			log.info("Returning VM Versions from SPP");
+			JsonObject responseJsonAll = (JsonObject) new JsonParser().parse(responseString);
+			JsonArray responseSessions = (JsonArray) responseJsonAll.get("versions");
+			return responseSessions.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.error("Error getting VM Versions from SPP");
+		return "Error getting VM Versions";
+	}
+
+	@Override
+	public String getSppFolderVersions(SppSession session, String folderid, String hvid) {
+		String folderVersUrl = session.getHost() + SppUrls.sppFolderVersionUrl.replace("HVID", hvid).replaceAll("FOLDERID", folderid);
+		try {
+			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
+			HttpUriRequest request = RequestBuilder.get().setUri(folderVersUrl).build();
+			request.setHeader("X-Endeavour-Sessionid", session.sessionid);
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			String responseString = EntityUtils.toString(entity, "UTF-8");
+			log.info("Returning Folder Versions from SPP");
+			JsonObject responseJsonAll = (JsonObject) new JsonParser().parse(responseString);
+			JsonArray responseSessions = (JsonArray) responseJsonAll.get("versions");
+			return responseSessions.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.error("Error getting Folder Versions from SPP");
+		return "Error getting Folder Versions";
 	}
 }

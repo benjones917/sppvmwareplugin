@@ -20,4 +20,8 @@ public interface SppService {
 	String restoreLatestVmTest(String vmName);
 
 	String getSppActiveRestoreSessions();
+	
+	String getSppVmVersionInfo(String vmid, String hvid);
+	
+	String getSppFolderVersionInfo(String vmid, String hvid);
 }

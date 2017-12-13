@@ -92,6 +92,22 @@ public class SppServiceImpl implements SppService {
 		return activeSessions;
 	}
 	
+	@Override
+	public String getSppVmVersionInfo(String vmid, String hvid) {
+		SppSession session = createSppSession();
+		String vmVersions = sppInfoService.getSppVmVersions(session, vmid, hvid);
+		deleteSppSession(session);
+		return vmVersions;
+	}
+	
+	@Override
+	public String getSppFolderVersionInfo(String folderid, String hvid) {
+		SppSession session = createSppSession();
+		String folderVersions = sppInfoService.getSppFolderVersions(session, folderid, hvid);
+		deleteSppSession(session);
+		return folderVersions;
+	}
+	
 	private SppSession createSppSession() {
 		RegistrationInfo regInfo = getSppRegistrationInfo();
 		return sppRegistrationService.sppLogIn(regInfo);

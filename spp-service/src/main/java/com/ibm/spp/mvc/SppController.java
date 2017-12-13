@@ -112,6 +112,22 @@ public class SppController {
 		String restoreSessions = _sppService.getSppActiveRestoreSessions();
 		return restoreSessions;
 	}
+	
+	@RequestMapping(value = "/vmversions", method = RequestMethod.GET)
+	@ResponseBody
+	public String getSppVmVersionInfo(@RequestParam(value = "vmid", required = true) String vmid,
+			@RequestParam(value = "hvid", required = true) String hvid) throws Exception {
+		String vmVersionInfo = _sppService.getSppVmVersionInfo(vmid, hvid);
+		return vmVersionInfo;
+	}
+	
+	@RequestMapping(value = "/folderversions", method = RequestMethod.GET)
+	@ResponseBody
+	public String getSppFolderVersionInfo(@RequestParam(value = "folderid", required = true) String folderid,
+			@RequestParam(value = "hvid", required = true) String hvid) throws Exception {
+		String vmVersionInfo = _sppService.getSppFolderVersionInfo(folderid, hvid);
+		return vmVersionInfo;
+	}
 
 	@ExceptionHandler(Exception.class)
 	@ResponseBody

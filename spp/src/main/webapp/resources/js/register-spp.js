@@ -77,6 +77,20 @@ $(document).ready(
 					alert(data);
 				})
 			});
+			
+			$('#getvmversinfotest').click(function () {
+				var $req = $.getJSON(PluginUtil.getWebContextPath()
+						+ "/rest/spp/vmversions", "hvid=1004&vmid=7df14b8e9cc59eb16c2157e83c775b64", function(data) {
+					alert(data);
+				})
+			});
+			
+			$('#getfolderversinfotest').click(function () {
+				var $req = $.getJSON(PluginUtil.getWebContextPath()
+						+ "/rest/spp/folderversions", "hvid=1004&folderid=4e4e4bf2bb8505ce19e37488a6c0474b", function(data) {
+					alert(data);
+				})
+			});
 		});
 
 function populate(frm, data) {

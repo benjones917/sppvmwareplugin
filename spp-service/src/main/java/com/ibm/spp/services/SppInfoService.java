@@ -14,4 +14,9 @@ public interface SppInfoService {
 
 	String getSppActiveRestoreSessions(SppSession session);
 
+	String getDashboardInfo(SppSession session);
+	
+	String getSppVmVersions(SppSession session, String vmid, String hvid);
+	
+	String getSppFolderVersions(SppSession session, String folderid, String hvid);
 }
