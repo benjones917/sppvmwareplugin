@@ -149,14 +149,14 @@
             <com.vmware.actionsfw.ActionSpec>
                <!-- UI action: show dialog -->
                <uid>com.ibm.spp.editSlaPolicy</uid>
-               <label>#{editSlaPolicy.name}</label>
+               <label>#{editVMSlaPolicy.name}</label>
                <icon>#{editIcon}</icon>
                <delegate>
                	  <className>com.vmware.vsphere.client.htmlbridge.HtmlActionDelegate</className>
                   <object><root>
                      <!-- execute the action on client-side (html view in a modal dialog) -->
-                     <actionUrl>/vsphere-client/spp/resources/vm-slapolicy-dialog.html</actionUrl>
-                     <dialogTitle>#{editSlaPolicy.name}</dialogTitle>
+                     <actionUrl>/vsphere-client/spp/resources/slapolicy-dialog.html</actionUrl>
+                     <dialogTitle>#{editVMSlaPolicy.name}</dialogTitle>
                      <dialogSize>600,250</dialogSize>
                   </root></object>
                </delegate>
@@ -240,5 +240,60 @@
          </componentClass>
       </object>
    </extension>
-
+   
+   <extension id="com.ibm.spp.folderActionSet">
+      <extendedPoint>vise.actions.sets</extendedPoint>
+      <object>
+         <actions>
+            <com.vmware.actionsfw.ActionSpec>
+               <!-- UI action: show dialog -->
+               <uid>com.ibm.spp.editFolderSlaPolicy</uid>
+               <label>#{editFolderSlaPolicy.name}</label>
+               <icon>#{editIcon}</icon>
+               <delegate>
+               	  <className>com.vmware.vsphere.client.htmlbridge.HtmlActionDelegate</className>
+                  <object><root>
+                     <!-- execute the action on client-side (html view in a modal dialog) -->
+                     <actionUrl>/vsphere-client/spp/resources/slapolicy-dialog.html</actionUrl>
+                     <dialogTitle>#{editFolderSlaPolicy.name}</dialogTitle>
+                     <dialogSize>600,250</dialogSize>
+                  </root></object>
+               </delegate>
+            </com.vmware.actionsfw.ActionSpec>
+         </actions>
+      </object>
+      <metadata>
+         <!-- Filter this extension only for Folder objects -->
+         <objectType>Folder</objectType>
+      </metadata>
+   </extension>
+   <!--
+      This extension uses the actions defined above to add a custom solution menu under
+      the existing VirtualMachine menu. It includes a sub-menu and separator.
+   -->
+   <extension id="com.ibm.spp.folderMenu">
+      <extendedPoint>vsphere.core.menus.solutionMenus</extendedPoint>
+      <object>
+         <!-- <label> is required here because it is an extension to an existing menu -->
+         <label>#{actionMenu.label}</label>
+         <icon>#{appIconSmall}</icon>
+         <uid>com.ibm.spp.folderMenu</uid>
+         <children>
+            <Array>
+               <com.vmware.actionsfw.ActionMenuItemSpec>
+                  <!-- UI action example -->
+                  <type>action</type>
+                  <uid>com.ibm.spp.editFolderSlaPolicy</uid>
+               </com.vmware.actionsfw.ActionMenuItemSpec>
+               <com.vmware.actionsfw.ActionMenuItemSpec>
+                  <type>separator</type>
+               </com.vmware.actionsfw.ActionMenuItemSpec>
+			</Array>
+         </children>
+      </object>
+      <metadata>
+         <!-- Filter creates this extension only for Folder objects -->
+         <objectType>Folder</objectType>
+      </metadata>
+   </extension>	
 </plugin>

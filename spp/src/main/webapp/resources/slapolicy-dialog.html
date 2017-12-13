@@ -14,7 +14,7 @@
 
    <!-- ** web-platform-bootstrap.js must be included before any other view code ** -->
    <script src="./js/web-platform-bootstrap.js"></script>
-   <script src="./js/vm-slapolicy-dialog.js"></script>
+   <script src="./js/slapolicy-dialog.js"></script>
    <style>
 		body {
 			padding: 0px 24px 24px 24px
@@ -25,12 +25,11 @@
    <!-- <h2 id="header">SPP SLA Policy</h2>-->
    <form id="setSlaPolicy" class="pure-form" action="">
    		<fieldset>
-   			<legend class="legend-custom" style="">Select SLA Policy for <span id="vmNameText"></span> virtual machine:</legend>
+   			<legend class="legend-custom" style="">Select SLA Policy for <span id="objectNameText"></span> <span id="objectTypeText"></span>:</legend>
 	   		<div class="pure-control-group" id="listslapolicies">
 			</div>
-			<div id="vmName"></div>
 	        <div class="pure-control-group">
-	        	<input type="hidden" name="vm" value="" id="hiddenVMName">
+	        	<input type="hidden" name="" value="" id="hiddenObjectName">
 		       	<button  type="button" id="cancel" class="pure-button" onclick="WEB_PLATFORM.closeDialog()">Cancel</button>
 		        <button  type="submit" id="submit" class="pure-button pure-button-primary">OK</button>
 	         </div>
