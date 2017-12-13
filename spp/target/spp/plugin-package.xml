@@ -9,8 +9,8 @@
    type: keep "html" for this plugin to be deployed in the vSphere HTML client.
    name: short name displayed in the Administration < Client plugins view
 -->
-<pluginPackage id="com.ibm.spp" version="1.0.0" type="html" name="spp"
-      description="Add plugin description" vendor="Add vendor">
+<pluginPackage id="com.ibm.spp" version="1.0.0" type="html" name="IBM SPP"
+      description="IBM Spectrum Protect Plus" vendor="IBM">
 
    <dependencies>
       <!--
