@@ -24,49 +24,49 @@ $(document).ready(
 			
 			$('#getvminfotest').click(function () {
 				var $req = $.get(PluginUtil.getWebContextPath()
-						+ "/rest/spp/vm", "vm=BCJ-LINUX", function(data) {
+						+ "/rest/spp/vm", "vm=BCJ-LINUX&vmid=vm-216", function(data) {
 					alert(data);
 				})
 			});
 			
 			$('#getfolderinfotest').click(function () {
 				var $req = $.get(PluginUtil.getWebContextPath()
-						+ "/rest/spp/folder", "folder=BCJ-SPP", function(data) {
+						+ "/rest/spp/folder", "folder=BCJ-SPP&groupid=group-v1347", function(data) {
 					alert(data);
 				})
 			});
 			
 			$('#assignvmtest').click(function () {
 				var $req = $.post(PluginUtil.getWebContextPath()
-						+ "/rest/spp/assignvm", "vm=BCJ-LINUX&sla=Gold,Silver", function(data) {
+						+ "/rest/spp/assignvm", "vm=BCJ-LINUX&vmid=vm-216&sla=Gold,Silver", function(data) {
 					alert(data);
 				})
 			});
 			
 			$('#unassignvmtest').click(function () {
 				var $req = $.post(PluginUtil.getWebContextPath()
-						+ "/rest/spp/assignvm", "vm=BCJ-LINUX&sla=", function(data) {
+						+ "/rest/spp/assignvm", "vm=BCJ-LINUX&vmid=vm-216&sla=", function(data) {
 					alert(data);
 				})
 			});
 			
 			$('#assignfoldertest').click(function () {
 				var $req = $.post(PluginUtil.getWebContextPath()
-						+ "/rest/spp/assignfolder", "folder=BCJ-SPP&sla=Silver,Bronze", function(data) {
+						+ "/rest/spp/assignfolder", "folder=BCJ-SPP&groupid=group-v1347&sla=Silver,Bronze", function(data) {
 					alert(data);
 				})
 			});
 			
 			$('#unassignfoldertest').click(function () {
 				var $req = $.post(PluginUtil.getWebContextPath()
-						+ "/rest/spp/assignfolder", "folder=BCJ-SPP&sla=", function(data) {
+						+ "/rest/spp/assignfolder", "folder=BCJ-SPP&groupid=group-v1347&sla=", function(data) {
 					alert(data);
 				})
 			});
 			
 			$('#restorevmtest').click(function () {
 				var $req = $.post(PluginUtil.getWebContextPath()
-						+ "/rest/spp/restore/latest/test", "vm=BCJ-LINUX", function(data) {
+						+ "/rest/spp/restore/latest/test", "vm=BCJ-LINUX&vmid=vm-216", function(data) {
 					alert(data);
 				})
 			});

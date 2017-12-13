@@ -40,17 +40,17 @@ public class SppServiceImpl implements SppService {
 	}
 	
 	@Override 
-	public String getSppVmInfo(String vmName) {
+	public String getSppVmInfo(String vmName, String vmId) {
 		SppSession session = createSppSession();
-		String vmInfo = sppInfoService.getSppVmInfo(vmName, session);
+		String vmInfo = sppInfoService.getSppVmInfo(vmName, vmId, session);
 		deleteSppSession(session);
 		return vmInfo;
 	}
 
 	@Override
-	public String getSppFolderInfo(String folderName) {
+	public String getSppFolderInfo(String folderName, String groupId) {
 		SppSession session = createSppSession();
-		String folderInfo = sppInfoService.getSppFolderInfo(folderName, session);
+		String folderInfo = sppInfoService.getSppFolderInfo(folderName, groupId, session);
 		deleteSppSession(session);
 		return folderInfo;
 	}
@@ -61,25 +61,25 @@ public class SppServiceImpl implements SppService {
 	}
 
 	@Override
-	public String assignVmToSla(String vmName, String slaName) {
+	public String assignVmToSla(String vmName, String vmId, String slaName) {
 		SppSession session = createSppSession();
-		String assignVm = sppAssignmentService.assignVmToSla(vmName, slaName, session);
+		String assignVm = sppAssignmentService.assignVmToSla(vmName, vmId, slaName, session);
 		deleteSppSession(session);
 		return assignVm;
 	}
 
 	@Override
-	public String assignFolderToSla(String folderName, String slaName) {
+	public String assignFolderToSla(String folderName, String groupId, String slaName) {
 		SppSession session = createSppSession();
-		String assignFolder = sppAssignmentService.assignFolderToSla(folderName, slaName, session);
+		String assignFolder = sppAssignmentService.assignFolderToSla(folderName, groupId, slaName, session);
 		deleteSppSession(session);
 		return assignFolder;
 	}
 	
 	@Override
-	public String restoreLatestVmTest(String vmName) {
+	public String restoreLatestVmTest(String vmName, String vmId) {
 		SppSession session = createSppSession();
-		String restoreVm = sppRestoreService.restoreLatestVmTest(vmName, session);
+		String restoreVm = sppRestoreService.restoreLatestVmTest(vmName, vmId, session);
 		deleteSppSession(session);
 		return restoreVm;
 	}

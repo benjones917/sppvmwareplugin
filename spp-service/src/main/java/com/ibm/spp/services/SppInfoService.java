@@ -6,11 +6,11 @@ public interface SppInfoService {
 
 	String getSlaPolicies(SppSession session);
 
-	String getSppVmInfo(String vmName, SppSession session);
+	String getSppVmInfo(String vmName, String vmId, SppSession session);
 
-	String getSppFolderInfo(String folderName, SppSession session);
+	String getSppFolderInfo(String folderName, String groupId, SppSession session);
 
-	String getSppVmInfoForRestore(String vmName, SppSession session);
+	String getSppVmInfoForRestore(String vmName, String vmId, SppSession session);
 
 	String getSppActiveRestoreSessions(SppSession session);
 

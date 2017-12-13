@@ -64,15 +64,17 @@ public class SppController {
 
 	@RequestMapping(value = "/vm", method = RequestMethod.GET)
 	@ResponseBody
-	public String getSppVmInfo(@RequestParam(value = "vm", required = true) String vm) throws Exception {
-		String vmInfo = _sppService.getSppVmInfo(vm);
+	public String getSppVmInfo(@RequestParam(value = "vm", required = true) String vm,
+			@RequestParam(value = "vmid", required = true) String vmid) throws Exception {
+		String vmInfo = _sppService.getSppVmInfo(vm, vmid);
 		return vmInfo;
 	}
 
 	@RequestMapping(value = "/folder", method = RequestMethod.GET)
 	@ResponseBody
-	public String getSppFolderInfo(@RequestParam(value = "folder", required = true) String folder) throws Exception {
-		String folderInfo = _sppService.getSppFolderInfo(folder);
+	public String getSppFolderInfo(@RequestParam(value = "folder", required = true) String folder,
+			@RequestParam(value = "groupid", required = true) String groupid) throws Exception {
+		String folderInfo = _sppService.getSppFolderInfo(folder, groupid);
 		return folderInfo;
 	}
 
@@ -80,17 +82,19 @@ public class SppController {
 	@RequestMapping(value = "/assignvm", method = RequestMethod.POST)
 	@ResponseBody
 	public String assignVmToSla(@RequestParam(value = "vm", required = true) String vm,
-			@RequestParam(value = "sla", required = true) String sla) throws Exception {
-		String vmAssignment = _sppService.assignVmToSla(vm, sla);
+			@RequestParam(value = "sla", required = true) String sla,
+			@RequestParam(value = "vmid", required = true) String vmid) throws Exception {
+		String vmAssignment = _sppService.assignVmToSla(vm, vmid, sla);
 		return vmAssignment;
 	}
 
 	// sla String parameter represents a list of SLA policies
 	@RequestMapping(value = "/assignfolder", method = RequestMethod.POST)
 	@ResponseBody
-	public String assignFolderToSla(@RequestParam(value = "folder", required = true) String folder,
+	public String assignFolderToSla(@RequestParam(value = "folder", required = true) String folder, 
+			@RequestParam(value = "groupid", required = true) String groupid,
 			@RequestParam(value = "sla", required = true) String sla) throws Exception {
-		String folderAssignment = _sppService.assignFolderToSla(folder, sla);
+		String folderAssignment = _sppService.assignFolderToSla(folder, groupid, sla);
 		return folderAssignment;
 	}
 
@@ -99,9 +103,10 @@ public class SppController {
 	// will add restore version selection in the future
 	@RequestMapping(value = "/restore/latest/test", method = RequestMethod.POST)
 	@ResponseBody
-	public String restoreLatestVmTest(@RequestParam(value = "vm", required = true) String vm) 
+	public String restoreLatestVmTest(@RequestParam(value = "vm", required = true) String vm,
+			@RequestParam(value = "vmid", required = true) String vmid) 
 			throws Exception {
-		String vmRestore = _sppService.restoreLatestVmTest(vm);
+		String vmRestore = _sppService.restoreLatestVmTest(vm, vmid);
 		return vmRestore;
 	}
 	

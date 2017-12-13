@@ -34,8 +34,8 @@ public class SppRestoreServiceImpl implements SppRestoreService {
 	SppInfoService sppInfoService = new SppInfoServiceImpl();
 	
 	@Override
-	public String restoreLatestVmTest(String vmName, SppSession session) {
-		String postJsonData = buildRestoreDataLatestTest(vmName, session);
+	public String restoreLatestVmTest(String vmName, String vmId, SppSession session) {
+		String postJsonData = buildRestoreDataLatestTest(vmName, vmId, session);
 		String postResponse = postRestoreData(postJsonData, session);
 		return postResponse;
 	}
@@ -66,8 +66,8 @@ public class SppRestoreServiceImpl implements SppRestoreService {
 	// main function to build restore JSON data for post
 	// can eventually be broken out into separate functions
 	// for each obj as we add more restore features/options
-	private String buildRestoreDataLatestTest(String vmName, SppSession session) {
-		String vmData = sppInfoService.getSppVmInfoForRestore(vmName, session);
+	private String buildRestoreDataLatestTest(String vmName, String vSphereVmId, SppSession session) {
+		String vmData = sppInfoService.getSppVmInfoForRestore(vmName, vSphereVmId, session);
 		JsonParser parser = new JsonParser();
 		JsonObject vmDataJson = parser.parse(vmData).getAsJsonObject();
 		

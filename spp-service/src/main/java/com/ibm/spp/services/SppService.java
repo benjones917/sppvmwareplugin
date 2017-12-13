@@ -9,15 +9,15 @@ public interface SppService {
 
 	RegistrationInfo getSppRegistrationInfo();
 
-	String getSppVmInfo(String vmName);
+	String getSppVmInfo(String vmName, String vmId);
 
-	String assignVmToSla(String vmName, String slaName);
+	String assignVmToSla(String vmName, String vmId, String slaName);
 
-	String assignFolderToSla(String folderName, String slaName);
+	String assignFolderToSla(String folderName, String groupId, String slaName);
 
-	String getSppFolderInfo(String folderName);
+	String getSppFolderInfo(String folderName, String groupId);
 
-	String restoreLatestVmTest(String vmName);
+	String restoreLatestVmTest(String vmName, String vmId);
 
 	String getSppActiveRestoreSessions();
 	

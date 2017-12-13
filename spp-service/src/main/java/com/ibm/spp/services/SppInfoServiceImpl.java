@@ -50,7 +50,7 @@ public class SppInfoServiceImpl implements SppInfoService {
 	// Uses the search API
 	// This is a POST here but a GET in our controller
 	@Override
-	public String getSppVmInfo(String vmName, SppSession session) {
+	public String getSppVmInfo(String vmName, String vmId, SppSession session) {
 		String vmUrl = session.getHost() + SppUrls.sppVmUrl;
 		JsonObject searchJO = new JsonObject();
 		searchJO.addProperty("name", vmName);
@@ -74,7 +74,9 @@ public class SppInfoServiceImpl implements SppInfoService {
 			for (int i = 0; i < sppVmJsonArray.size(); i++) {
 				JsonObject vm = sppVmJsonArray.get(i).getAsJsonObject();
 				String vmNameFromSearch = vm.get("name").getAsString();
-				if (vmNameFromSearch.equals(vmName)) {
+				String vmNativeIdFromSearch = vm.get("nativeObject").getAsJsonObject().get("mor")
+						.getAsJsonObject().get("val").getAsString();
+				if (vmNameFromSearch.equals(vmName) && vmNativeIdFromSearch.equals(vmId)) {
 					return sppVmJsonArray.get(i).toString();
 				}
 			}
@@ -87,7 +89,7 @@ public class SppInfoServiceImpl implements SppInfoService {
 	
 	// Same as above but uses restore clause in url
 	@Override
-	public String getSppVmInfoForRestore(String vmName, SppSession session) {
+	public String getSppVmInfoForRestore(String vmName, String vmId, SppSession session) {
 		String vmUrl = session.getHost() + SppUrls.sppVmRestoreUrl;
 		JsonObject searchJO = new JsonObject();
 		searchJO.addProperty("name", vmName);
@@ -111,7 +113,9 @@ public class SppInfoServiceImpl implements SppInfoService {
 			for (int i = 0; i < sppVmJsonArray.size(); i++) {
 				JsonObject vm = sppVmJsonArray.get(i).getAsJsonObject();
 				String vmNameFromSearch = vm.get("name").getAsString();
-				if (vmNameFromSearch.equals(vmName)) {
+				String vmNativeIdFromSearch = vm.get("nativeObject").getAsJsonObject().get("mor")
+						.getAsJsonObject().get("val").getAsString();
+				if (vmNameFromSearch.equals(vmName) && vmNativeIdFromSearch.equals(vmId)) {
 					return sppVmJsonArray.get(i).toString();
 				}
 			}
@@ -126,7 +130,7 @@ public class SppInfoServiceImpl implements SppInfoService {
 	// Uses the search API
 	// This is a POST here but a GET in our controller
 	@Override
-	public String getSppFolderInfo(String folderName, SppSession session) {
+	public String getSppFolderInfo(String folderName, String groupId, SppSession session) {
 		String folderUrl = session.getHost() + SppUrls.sppFolderUrl;
 		JsonObject searchJO = new JsonObject();
 		searchJO.addProperty("name", folderName);
@@ -148,9 +152,11 @@ public class SppInfoServiceImpl implements SppInfoService {
 			// need loop here to match name exactly in case search returns
 			// multiple results
 			for (int i = 0; i < sppFolderJsonArray.size(); i++) {
-				JsonObject vm = sppFolderJsonArray.get(i).getAsJsonObject();
-				String vmNameFromSearch = vm.get("name").getAsString();
-				if (vmNameFromSearch.equals(folderName)) {
+				JsonObject folder = sppFolderJsonArray.get(i).getAsJsonObject();
+				String folderNameFromSearch = folder.get("name").getAsString();
+				String folderNativeIdFromSearch = folder.get("nativeObject").getAsJsonObject().get("mor")
+						.getAsJsonObject().get("val").getAsString();
+				if (folderNameFromSearch.equals(folderName) && folderNativeIdFromSearch.equals(groupId)) {
 					return sppFolderJsonArray.get(i).toString();
 				}
 			}

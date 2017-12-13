@@ -37,10 +37,10 @@ public class SppAssignmentServiceImpl implements SppAssignmentService {
 	// Takes a String of VM and List of String SLA policy names
 	// UI should pass in any existing SLA policy names that aren't removed
 	@Override
-	public String assignVmToSla(String vmName, String slaName, SppSession session) {
+	public String assignVmToSla(String vmName, String vmId, String slaName, SppSession session) {
 		List<String> slaNameList = new ArrayList<String>();
 		slaNameList = Arrays.asList(slaName.split(","));
-		SppAssignment assignData = buildAssignmentDataVm(vmName, slaNameList, session);
+		SppAssignment assignData = buildAssignmentDataVm(vmName, vmId, slaNameList, session);
 		String assignBody = new Gson().toJson(assignData);
 		String postResponse = postAssignmentData(assignBody, session);
 		return postResponse;
@@ -48,10 +48,10 @@ public class SppAssignmentServiceImpl implements SppAssignmentService {
 
 	// Same as above but for folder
 	@Override
-	public String assignFolderToSla(String folderName, String slaName, SppSession session) {
+	public String assignFolderToSla(String folderName, String groupId, String slaName, SppSession session) {
 		List<String> slaNameList = new ArrayList<String>();
 		slaNameList = Arrays.asList(slaName.split(","));
-		SppAssignment assignData = buildAssignmentDataFolder(folderName, slaNameList, session);
+		SppAssignment assignData = buildAssignmentDataFolder(folderName, groupId, slaNameList, session);
 		String assignBody = new Gson().toJson(assignData);
 		String postResponse = postAssignmentData(assignBody, session);
 		return postResponse;
@@ -81,23 +81,23 @@ public class SppAssignmentServiceImpl implements SppAssignmentService {
 		return "Error Assigning Resource to SLA";
 	}
 
-	private SppAssignment buildAssignmentDataVm(String vmName, List<String> slaNameList, SppSession session) {
+	private SppAssignment buildAssignmentDataVm(String vmName, String vmId, List<String> slaNameList, SppSession session) {
 		SppAssignment assignData = new SppAssignment();
-		assignData.setResources(buildResourceDataVm(vmName, session));
+		assignData.setResources(buildResourceDataVm(vmName, vmId, session));
 		assignData.setSlapolicies(buildSlaData(slaNameList, session));
 		return assignData;
 	}
 
-	private SppAssignment buildAssignmentDataFolder(String folderName, List<String> slaNameList, SppSession session) {
+	private SppAssignment buildAssignmentDataFolder(String folderName, String groupId, List<String> slaNameList, SppSession session) {
 		SppAssignment assignData = new SppAssignment();
-		assignData.setResources(buildResourceDataFolder(folderName, session));
+		assignData.setResources(buildResourceDataFolder(folderName, groupId, session));
 		assignData.setSlapolicies(buildSlaData(slaNameList, session));
 		return assignData;
 	}
 
-	private List<SppAssignmentResources> buildResourceDataVm(String vmName, SppSession session) {
+	private List<SppAssignmentResources> buildResourceDataVm(String vmName, String vmId, SppSession session) {
 		List<SppAssignmentResources> assignmentResources = new ArrayList<SppAssignmentResources>();
-		String sppVm = sppInfoService.getSppVmInfo(vmName, session);
+		String sppVm = sppInfoService.getSppVmInfo(vmName, vmId, session);
 		JsonObject sppVmJson = (JsonObject) new JsonParser().parse(sppVm);
 		SppAssignmentResources resource = new SppAssignmentResources();
 		resource.setId(sppVmJson.get("id").getAsString());
@@ -128,9 +128,9 @@ public class SppAssignmentServiceImpl implements SppAssignmentService {
 		return assignmentSlas;
 	}
 
-	private List<SppAssignmentResources> buildResourceDataFolder(String folderName, SppSession session) {
+	private List<SppAssignmentResources> buildResourceDataFolder(String folderName, String groupId, SppSession session) {
 		List<SppAssignmentResources> assignmentResources = new ArrayList<SppAssignmentResources>();
-		String sppFolder = sppInfoService.getSppFolderInfo(folderName, session);
+		String sppFolder = sppInfoService.getSppFolderInfo(folderName, groupId, session);
 		JsonObject sppFolderJson = (JsonObject) new JsonParser().parse(sppFolder);
 		SppAssignmentResources resource = new SppAssignmentResources();
 		resource.setId(sppFolderJson.get("id").getAsString());
