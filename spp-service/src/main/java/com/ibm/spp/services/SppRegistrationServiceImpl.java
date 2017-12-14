@@ -24,6 +24,7 @@ import com.google.gson.Gson;
 import com.ibm.spp.domain.RegistrationInfo;
 import com.ibm.spp.domain.SppSession;
 import com.ibm.spp.domain.SppUrls;
+import com.ibm.spp.domain.SppVcenterRegistration;
 
 public class SppRegistrationServiceImpl implements SppRegistrationService {
 	
@@ -143,5 +144,25 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 			path = "/storage/spp/regInfo.config";
 		}
 		return path;
+	}
+
+	@Override
+	public String registerVcenter(String vcRegInfo) {
+		RegistrationInfo regInfo = getSppRegistrationInfo();
+		SppSession session = sppLogIn(regInfo);
+		SppVcenterRegistration vcRegObj = new Gson().fromJson(vcRegInfo, SppVcenterRegistration.class);
+		// set currently hardcoded variables (which we don't want to manage in plugin UI)
+		// reserialize
+		// make registration POST to /spp/ecxngp/hypervisor
+		// return proper response String
+		return null;
+	}
+
+	@Override
+	public String getVcRegistration(String vcId) {
+		// make GET call to /spp/ecxngp/hypervisor (returns list of registered hypervisors)
+		// loop through and compare response attr uniqueId to passed in vcenter ID
+		// if we find that return the record, else return indication that vcenter not yet registered
+		return null;
 	}
 }

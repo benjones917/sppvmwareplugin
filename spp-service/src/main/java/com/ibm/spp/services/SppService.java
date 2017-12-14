@@ -24,4 +24,8 @@ public interface SppService {
 	String getSppVmVersionInfo(String vmid, String hvid);
 	
 	String getSppFolderVersionInfo(String vmid, String hvid);
+	
+	String registerVcenter(String registrationInfo);
+	
+	String getVcRegistration(String vcId);
 }

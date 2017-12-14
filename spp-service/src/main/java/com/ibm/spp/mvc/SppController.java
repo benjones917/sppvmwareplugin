@@ -54,6 +54,21 @@ public class SppController {
 		String registration = new Gson().toJson(regInfo);
 		return registration;
 	}
+	
+	@RequestMapping(value = "/vcreg", method = RequestMethod.POST)
+	@ResponseBody
+	public String vcReg(@RequestParam(value = "registrationInfo", required = true) String registrationInfo)
+			throws Exception {
+		return _sppService.registerVcenter(registrationInfo);
+	}
+
+	@RequestMapping(value = "/vcreg", method = RequestMethod.GET)
+	@ResponseBody
+	public String getVcReg(@RequestParam(value = "vcid", required = true) String vcId) 
+			throws Exception {
+		String registration = _sppService.getVcRegistration(vcId);
+		return registration;
+	}
 
 	@RequestMapping(value = "/sla", method = RequestMethod.GET)
 	@ResponseBody

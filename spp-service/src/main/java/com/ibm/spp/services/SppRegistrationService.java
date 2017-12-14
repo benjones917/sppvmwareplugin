@@ -12,5 +12,9 @@ public interface SppRegistrationService {
 	void sppLogOut(SppSession session);
 
 	RegistrationInfo getSppRegistrationInfo();
+	
+	String registerVcenter(String vcRegInfo);
+	
+	String getVcRegistration(String vcId);
 
 }

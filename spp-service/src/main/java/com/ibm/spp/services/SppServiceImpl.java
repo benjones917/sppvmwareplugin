@@ -117,4 +117,15 @@ public class SppServiceImpl implements SppService {
 		sppRegistrationService.sppLogOut(session);
 	}
 
+	@Override
+	public String registerVcenter(String registrationInfo) {
+		sppRegistrationService.registerVcenter(registrationInfo);
+		return null;
+	}
+
+	@Override
+	public String getVcRegistration(String vcId) {
+		return sppRegistrationService.getVcRegistration(vcId);
+	}
+
 }
