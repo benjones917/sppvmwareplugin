@@ -4,7 +4,9 @@ $(document).ready(function() {
 	var selectedName;
 	var selectedOptions;
 	var selectedType;
-	var folderFlag = false;
+	var selectedIdType;
+	var selectedId;
+	var params = {};
 	
 	// Get current objectID
 	var targets = WEB_PLATFORM.getActionTargets();
@@ -23,17 +25,26 @@ $(document).ready(function() {
         // data object contains the properties listed above
 		if(data.childType != null) {
 			selectedType = 'folder';
+			selectedIdType = 'groupid';
+			selectedId = getUniqueID(targets,'Folder');
 	    }else{
 	    	selectedType = 'vm';
+	    	selectedIdType = 'vmid';
+	    	selectedId = getUniqueID(targets,'VirtualMachine');
 	    }
+		
 		selectedName = data.name;
+		params[selectedIdType] = selectedId;
+		params[selectedType] = selectedName;
     });
-
+	if(selectedId == null){
+		return;
+	}
 	// Get the VM data from SPP
 	var $vmreq = $.get(PluginUtil.getWebContextPath()
-			+ "/rest/spp/" + selectedType, selectedType+"="+selectedName, function(data) {
+			+ "/rest/spp/" + selectedType, params, function(data) {
 			selectedOptions = JSON.parse(data);
-	})
+	});
 	
 	$("#objectNameText").append(document.createTextNode(selectedName));
 	if(selectedType == 'vm'){
@@ -43,6 +54,8 @@ $(document).ready(function() {
 	}
 	$("#hiddenObjectName").val(selectedName);
 	$("#hiddenObjectName").attr("name",selectedType);
+	$("#hiddenObjectId").val(selectedId);
+	$("#hiddenObjectId").attr("name",selectedIdType);
 	
 	// Get all SLA policies and select all that are enabled for specific VM
 	var $slareq = $.getJSON(PluginUtil.getWebContextPath()
@@ -80,12 +93,20 @@ $(document).ready(function() {
 			if(params.search("sla=") < 0) {
 				params += "&sla=";				
 			}
-
 			var $assreq = $.post(PluginUtil.getWebContextPath()
 					+ "/rest/spp/assign" + selectedType, params, function(data) {
-				console.log(data);
+				//console.log(data);
 			})
 			WEB_PLATFORM.closeDialog();
 			return false;
 		});
 });
+
+function getUniqueID(objectId, type){
+	var uniqueId;
+	arrObj = objectId.split(":");
+	if(arrObj.indexOf(type) >= 0) {
+		uniqueId = arrObj[arrObj.indexOf(type)+1];
+	}
+	return uniqueId;
+}

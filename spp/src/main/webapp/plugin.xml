@@ -161,6 +161,20 @@
                   </root></object>
                </delegate>
             </com.vmware.actionsfw.ActionSpec>
+            <com.vmware.actionsfw.ActionSpec>
+               <!-- Action to do a restore on a virtual machine -->
+               <uid>com.ibm.spp.restoreVM</uid>
+               <label>#{restoreVM.name}</label>
+               <delegate>
+               	  <className>com.vmware.vsphere.client.htmlbridge.HtmlActionDelegate</className>
+                  <object><root>
+                     <!-- execute the action on client-side (html view in a modal dialog) -->
+                     <actionUrl>/vsphere-client/spp/resources/restore-dialog.html</actionUrl>
+                     <dialogTitle>#{restoreVM.name}</dialogTitle>
+                     <dialogSize>600,400</dialogSize>
+                  </root></object>
+               </delegate>
+            </com.vmware.actionsfw.ActionSpec>
          </actions>
       </object>
       <metadata>
@@ -187,10 +201,14 @@
                   <type>action</type>
                   <uid>com.ibm.spp.editSlaPolicy</uid>
                </com.vmware.actionsfw.ActionMenuItemSpec>
-               <com.vmware.actionsfw.ActionMenuItemSpec>
+               <!--<com.vmware.actionsfw.ActionMenuItemSpec>
                   <type>separator</type>
+               </com.vmware.actionsfw.ActionMenuItemSpec>-->
+			   <com.vmware.actionsfw.ActionMenuItemSpec>
+                  <!-- UI action example -->
+                  <type>action</type>
+                  <uid>com.ibm.spp.restoreVM</uid>
                </com.vmware.actionsfw.ActionMenuItemSpec>
-
                <!-- Here is how you can group actions into a sub-menu.  Note that sub-menus should only be
                     used within complex menus. A flat menu is a better user experience in most cases.
                <com.vmware.actionsfw.ActionMenuItemSpec>
