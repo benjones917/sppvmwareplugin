@@ -17,10 +17,10 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.stereotype.Service;
-
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.ibm.spp.domain.RegistrationInfo;
 import com.ibm.spp.domain.SppSession;
 import com.ibm.spp.domain.SppUrls;
@@ -150,6 +150,7 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 	public String registerVcenter(String vcRegInfo) {
 		RegistrationInfo regInfo = getSppRegistrationInfo();
 		SppSession session = sppLogIn(regInfo);
+		String hvUrl = session.getHost() + SppUrls.sppHypervisorUrl;
 		SppVcenterRegistration vcRegObj = new Gson().fromJson(vcRegInfo, SppVcenterRegistration.class);
 		// set currently hardcoded variables (which we don't want to manage in plugin UI)
 		// reserialize
@@ -160,9 +161,30 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 
 	@Override
 	public String getVcRegistration(String vcId) {
-		// make GET call to /spp/ecxngp/hypervisor (returns list of registered hypervisors)
-		// loop through and compare response attr uniqueId to passed in vcenter ID
-		// if we find that return the record, else return indication that vcenter not yet registered
-		return null;
+		RegistrationInfo regInfo = getSppRegistrationInfo();
+		SppSession session = sppLogIn(regInfo);
+		String hvUrl = session.getHost() + SppUrls.sppHypervisorUrl;
+		try {
+			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
+			HttpUriRequest request = RequestBuilder.get().setUri(hvUrl).build();
+			request.setHeader("X-Endeavour-Sessionid", session.getSessionId());
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			String responseString = EntityUtils.toString(entity, "UTF-8");
+			log.info("Returning registered HyperVisors from SPP");
+			JsonObject hvJsonAll = (JsonObject) new JsonParser().parse(responseString);
+			JsonArray hvJsonArray = (JsonArray) hvJsonAll.get("hypervisors");
+			for (int i = 0; i < hvJsonArray.size(); i++) {
+				JsonObject hv = hvJsonArray.get(i).getAsJsonObject();
+				String hvUid = hv.get("uniqueId").getAsString();
+				if(hvUid.equals(vcId)) {
+					return hv.getAsString();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.error("HyperVisor not found in SPP");
+		return "HyperVisor not found in SPP";
 	}
 }
