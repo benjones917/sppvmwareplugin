@@ -11,7 +11,4 @@
 * __Front end todo:__
 * Seperate registration screen or dialog
    * Link to this from main view screen
-* Add list of backups to SLA policy select screen on VMs and Folders
-   * This is a call to the /vmversions and /folderversions plugin service endpoints
-   * Must pass in SPP HyperVisor ID and VM/Folder ID ... this is available in the vm and folder responses
 * Create main view/dashboard (show all vms with SLA associations?)
