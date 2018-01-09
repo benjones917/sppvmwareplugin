@@ -13,10 +13,10 @@ public interface SppInfoService {
 	String getSppVmInfoForRestore(String vmName, String vmId, SppSession session);
 
 	String getSppActiveRestoreSessions(SppSession session);
-
-	String getDashboardInfo(SppSession session);
 	
 	String getSppVmVersions(SppSession session, String vmid, String hvid);
 	
 	String getSppFolderVersions(SppSession session, String folderid, String hvid);
+
+	String getSppDashboardInfo(SppSession session, String hvid);
 }

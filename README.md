@@ -3,12 +3,11 @@
 * __Back end todo:__
 * Controller and service methods needed:
   * Dashboard Info Service
-  * Check/Register vSphere provider in SPP
-  * VM/Folder version service
-* Determine VMWare unique ID (also accessible in SPP data) to ensure proper match
-  * Will need to be passed into appropriate service functions from UI
+* Abstract SPP REST calls into own class
 
 * __Front end todo:__
 * Seperate registration screen or dialog
    * Link to this from main view screen
 * Create main view/dashboard (show all vms with SLA associations?)
+* Conditional displays based on registration status
+

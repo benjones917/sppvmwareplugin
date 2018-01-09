@@ -188,11 +188,6 @@ public class SppInfoServiceImpl implements SppInfoService {
 		return "Error getting Active Restore Sessions";
 	}
 
-	@Override
-	public String getDashboardInfo(SppSession session) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public String getSppVmVersions(SppSession session, String vmid, String hvid) {
@@ -234,5 +229,41 @@ public class SppInfoServiceImpl implements SppInfoService {
 		}
 		log.error("Error getting Folder Versions from SPP");
 		return "Error getting Folder Versions";
+	}
+	
+	@Override
+	public String getSppDashboardInfo(SppSession session, String hvid) {
+		String sppHvId = getSppVcenterId(session, hvid);
+		// make call to get all VMs for vCenter and return all of that as JSON
+		// this will be used for dashboard information
+		// call could take some time so we may need loading widget in UI
+		return null;
+	}
+	
+	// Get SPP vcenter ID based on vmware vcenter ID
+	private String getSppVcenterId(SppSession session, String hvid) {
+		String hvUrl = session.getHost() + SppUrls.sppHypervisorUrl;
+		try {
+			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
+			HttpUriRequest request = RequestBuilder.get().setUri(hvUrl).build();
+			request.setHeader("X-Endeavour-Sessionid", session.getSessionId());
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			String responseString = EntityUtils.toString(entity, "UTF-8");
+			log.info("Getting vCenter ID from SPP");
+			JsonObject hvJsonAll = (JsonObject) new JsonParser().parse(responseString);
+			JsonArray hvJsonArray = (JsonArray) hvJsonAll.get("hypervisors");
+			for (int i = 0; i < hvJsonArray.size(); i++) {
+				JsonObject hv = hvJsonArray.get(i).getAsJsonObject();
+				String hvUid = hv.get("uniqueId").getAsString();
+				if(hvUid.equals(hvid)) {
+					return hv.get("id").getAsString();
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.error("Error getting SPP vCenter ID");
+		return "Error getting SPP vCenter ID";
 	}
 }

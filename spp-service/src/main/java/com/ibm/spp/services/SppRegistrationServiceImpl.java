@@ -7,14 +7,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import com.google.gson.Gson;
@@ -152,11 +156,29 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 		SppSession session = sppLogIn(regInfo);
 		String hvUrl = session.getHost() + SppUrls.sppHypervisorUrl;
 		SppVcenterRegistration vcRegObj = new Gson().fromJson(vcRegInfo, SppVcenterRegistration.class);
-		// set currently hardcoded variables (which we don't want to manage in plugin UI)
-		// reserialize
-		// make registration POST to /spp/ecxngp/hypervisor
-		// return proper response String
-		return null;
+		Map<String,Integer> props = new HashMap<String,Integer>();
+		props.put("snapshotConcurrency", 3);
+		vcRegObj.setOpProperties(props);
+		String postData =  new Gson().toJson(vcRegObj);
+		try {
+			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
+			HttpPost request = new HttpPost(hvUrl);
+			request.setHeader("X-Endeavour-Sessionid", session.sessionid);
+			request.setHeader("Accept", "application/json");
+			request.setHeader("Content-Type", "application/json");
+			StringEntity body = new StringEntity(postData);
+			request.setEntity(body);
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			String responseString = EntityUtils.toString(entity, "UTF-8");
+			log.info("Registering vCenter");
+			return responseString;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.error("Error Registering vCenter");
+		log.error("Body: " + postData);
+		return "Error Registering vCenter";
 	}
 
 	@Override
