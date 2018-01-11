@@ -13,8 +13,8 @@ public interface SppRegistrationService {
 
 	RegistrationInfo getSppRegistrationInfo();
 	
-	String registerVcenter(String vcRegInfo);
+	String registerVcenter(String vcRegInfo, SppSession session);
 	
-	String getVcRegistration(String vcId);
+	String getVcRegistration(String vcId, SppSession session);
 
 }

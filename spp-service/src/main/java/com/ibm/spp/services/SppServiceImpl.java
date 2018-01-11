@@ -119,13 +119,26 @@ public class SppServiceImpl implements SppService {
 
 	@Override
 	public String registerVcenter(String registrationInfo) {
-		sppRegistrationService.registerVcenter(registrationInfo);
-		return null;
+		SppSession session = createSppSession();
+		String regResponse = sppRegistrationService.registerVcenter(registrationInfo, session);
+		deleteSppSession(session);
+		return regResponse;
 	}
 
 	@Override
 	public String getVcRegistration(String vcId) {
-		return sppRegistrationService.getVcRegistration(vcId);
+		SppSession session = createSppSession();
+		String regResponse = sppRegistrationService.getVcRegistration(vcId, session);
+		deleteSppSession(session);
+		return regResponse;
+	}
+	
+	@Override
+	public String getDashboardInfo(String vcId) {
+		SppSession session = createSppSession();
+		String dashInfo = sppInfoService.getSppDashboardInfo(session, vcId);
+		deleteSppSession(session);
+		return dashInfo;
 	}
 
 }

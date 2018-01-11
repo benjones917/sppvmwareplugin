@@ -28,4 +28,6 @@ public interface SppService {
 	String registerVcenter(String registrationInfo);
 	
 	String getVcRegistration(String vcId);
+
+	String getDashboardInfo(String vcId);
 }

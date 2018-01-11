@@ -148,6 +148,13 @@ public class SppController {
 		String vmVersionInfo = _sppService.getSppFolderVersionInfo(folderid, hvid);
 		return vmVersionInfo;
 	}
+	
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+	@ResponseBody
+	public String getSppDashInfo(@RequestParam(value = "hvid", required = true) String hvid) throws Exception {
+		String dashInfo = _sppService.getDashboardInfo(hvid);
+		return dashInfo;
+	}
 
 	@ExceptionHandler(Exception.class)
 	@ResponseBody

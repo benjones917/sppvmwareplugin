@@ -151,9 +151,8 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 	}
 
 	@Override
-	public String registerVcenter(String vcRegInfo) {
+	public String registerVcenter(String vcRegInfo, SppSession session) {
 		RegistrationInfo regInfo = getSppRegistrationInfo();
-		SppSession session = sppLogIn(regInfo);
 		String hvUrl = session.getHost() + SppUrls.sppHypervisorUrl;
 		SppVcenterRegistration vcRegObj = new Gson().fromJson(vcRegInfo, SppVcenterRegistration.class);
 		Map<String,Integer> props = new HashMap<String,Integer>();
@@ -182,9 +181,7 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 	}
 
 	@Override
-	public String getVcRegistration(String vcId) {
-		RegistrationInfo regInfo = getSppRegistrationInfo();
-		SppSession session = sppLogIn(regInfo);
+	public String getVcRegistration(String vcId, SppSession session) {
 		String hvUrl = session.getHost() + SppUrls.sppHypervisorUrl;
 		try {
 			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();

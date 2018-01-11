@@ -234,10 +234,23 @@ public class SppInfoServiceImpl implements SppInfoService {
 	@Override
 	public String getSppDashboardInfo(SppSession session, String hvid) {
 		String sppHvId = getSppVcenterId(session, hvid);
-		// make call to get all VMs for vCenter and return all of that as JSON
-		// this will be used for dashboard information
-		// call could take some time so we may need loading widget in UI
-		return null;
+		String allVmsId = session.getHost() + SppUrls.sppAllVmsUrl.replace("HVID", sppHvId);
+		try {
+			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();
+			HttpUriRequest request = RequestBuilder.get().setUri(allVmsId).build();
+			request.setHeader("X-Endeavour-Sessionid", session.sessionid);
+			HttpResponse response = httpclient.execute(request);
+			HttpEntity entity = response.getEntity();
+			String responseString = EntityUtils.toString(entity, "UTF-8");
+			log.info("Returning All VMs for Hypervisor");
+			JsonObject responseJsonAll = (JsonObject) new JsonParser().parse(responseString);
+			JsonArray responseContent = (JsonArray) responseJsonAll.get("vms");
+			return responseContent.toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		log.error("Error getting Folder Versions from SPP");
+		return "Error getting Folder Versions";
 	}
 	
 	// Get SPP vcenter ID based on vmware vcenter ID
