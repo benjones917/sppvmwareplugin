@@ -249,8 +249,8 @@ public class SppInfoServiceImpl implements SppInfoService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		log.error("Error getting Folder Versions from SPP");
-		return "Error getting Folder Versions";
+		log.error("Error getting all VM info from SPP");
+		return "Error getting all VM info";
 	}
 	
 	// Get SPP vcenter ID based on vmware vcenter ID

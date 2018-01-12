@@ -149,6 +149,7 @@ public class SppController {
 		return vmVersionInfo;
 	}
 	
+	//hvid here represents the internal vSphere ID, NOT the SPP ID
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
 	@ResponseBody
 	public String getSppDashInfo(@RequestParam(value = "hvid", required = true) String hvid) throws Exception {
