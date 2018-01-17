@@ -197,7 +197,7 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 				JsonObject hv = hvJsonArray.get(i).getAsJsonObject();
 				String hvUid = hv.get("uniqueId").getAsString();
 				if(hvUid.equals(vcId)) {
-					return hv.getAsString();
+					return hv.toString();
 				}
 			}
 		} catch (Exception e) {
