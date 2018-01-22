@@ -73,7 +73,7 @@ $(document).ready(function() {
 		var dateCell = row.insertCell(-1);
 		dateCell.innerHTML = convertTimestamp(restorePoints[i].protectionTime);
 		var policyCell = row.insertCell(-1);
-		var policyText = document.createTextNode(restorePoints[i].storageProfiles[0]);
+		var policyText = document.createTextNode(restorePoints[i].protectionInfo['storageProfileName']);
 		policyCell.appendChild(policyText);
 		row.appendChild(selectCell);
 		row.appendChild(dateCell);

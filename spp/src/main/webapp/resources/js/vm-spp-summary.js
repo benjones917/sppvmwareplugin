@@ -1,59 +1,103 @@
-/* Copyright (c) 2012-2017 VMware, Inc. All rights reserved. */
-// Use JQuery's $(document).ready to execute the script when the document is loaded.
-// All variables and functions are also hidden from the global scope.
-
 $(document).ready(function() {
 
-   // Get current object and return if document is loaded before context is set
-   var objectId = WEB_PLATFORM.getObjectId();
-   //console.log(WEB_PLATFORM.getRootPath());
-   if (!objectId) {
-      return;
-   }
-   var locale = WEB_PLATFORM.getLocale().replace("_","-");
-   
-   var test = getUniqueID(objectId, "VirtualMachine");
+	// Set variables
+	var selectedName;
+	var selectedOptions;
+	var selectedType;
+	var selectedIdType;
+	var selectedId;
+	var params = {};
+	var versionParams = {};
+	
+	// Get current objectID
+	var objectId = WEB_PLATFORM.getObjectId();
+	//console.log(WEB_PLATFORM.getRootPath());
+	if (!objectId) {
+		return;
+	}
 
-   // REST url to retrieve a list of properties
-   /*var dataUrl = PluginUtil.buildDataUrl(objectId, ["samples:vmData"]);
+	// Set Asynchronous to false to allow all requests to complete before moving to next step
+	$.ajaxSetup({
+	    async: false
+	});
+	
+	// Get the VM name using the VMware object ID
+	var dataUrl = '/ui/data/properties/' + objectId + '?properties=name,childType';
+	$.getJSON(dataUrl, function (data) {
+        // data object contains the properties listed above
+		if(data.childType != null) {
+			selectedType = 'folder';
+			selectedIdType = 'groupid';
+			selectedId = getUniqueID(objectId,'Folder');
+	    }else{
+	    	selectedType = 'vm';
+	    	selectedIdType = 'vmid';
+	    	selectedId = getUniqueID(objectId,'VirtualMachine');
+	    }
+		
+		selectedName = data.name;
+		params[selectedIdType] = selectedId;
+		params[selectedType] = selectedName;
+    });
+	if(selectedId == null){
+		return;
+	}
+	// Get the VM data from SPP
+	var $vmreq = $.get(PluginUtil.getWebContextPath()
+			+ "/rest/spp/" + selectedType, params, function(data) {
+			selectedOptions = JSON.parse(data);
+	});
 
-   // Refresh the view and register same function as GlobalRefresh handler so that
-   // the view is also refreshed when the user hits the toolbar's Refresh button
-   refreshData();
-   WEB_PLATFORM.setGlobalRefreshHandler(refreshData, document);
-
-   function refreshData() {
-      // JQuery call to the DataAccessController in the Java plugin
-      $.getJSON(dataUrl, function (data) {
-         // The "sample:vmData" property is an object containing the VmData field
-         var vmData = data["samples:vmData"];
-
-         // Add a timestamp just to show when content is refreshed
-         var currentTime = new Date().toLocaleTimeString(locale);
-         var currentDate = new Date().toLocaleDateString(locale);
-         var updatedInfo = PluginUtil.getString("updatedInfo", [currentTime, currentDate]);
-
-         $("#sppInfo").html(
-            "<p><b>Virtual Machine Name: </b>" + escape(vmData.vmName) +
-            "<br/><b>Data Center Name: </b>" + escape(vmData.datacenterName) +
-            "<br/><b>Virtual CPUs: </b>" + vmData.numberOfVirtualCpus +
-            "<br/><b>Disk Capacity: </b>" + vmData.capacityInKb  +
-            "<p><i>" + updatedInfo + "</i></p>");
-      });
-   }*/
+	versionParams['hvid'] = selectedOptions.hypervisorManagementServerID;
+	versionParams[selectedIdType] = selectedOptions.id;
+	
+	var restorePoints;
+	var $req = $.getJSON(PluginUtil.getWebContextPath()
+			+ "/rest/spp/vmversions", versionParams, function(data) {
+		restorePoints = data;
+	})
+	var table = document.getElementById("restoreTable");
+	$("#hiddenLatestRestoreId").val(restorePoints[0].id);
+	for(i=0;i<restorePoints.length;i++){
+		//var row = document.createElement("tr");
+		//var selectCell = document.createElement("td");
+		//console.log(restorePoints[i].protectionInfo['policyName']);
+		console.log(restorePoints[i]);
+		var row = table.insertRow(-1);
+		var selectCell = row.insertCell(-1);
+		var radio = document.createElement("input");
+		radio.type = "radio";
+		radio.name = "restorePoint";
+		radio.value = restorePoints[i].id;
+		selectCell.appendChild(radio);
+		var dateCell = document.createElement("td");
+		dateCell.innerHTML = convertTimestamp(restorePoints[i].protectionTime);
+		var policyCell = document.createElement("td");
+		var policyText = document.createTextNode(restorePoints[i].protectionInfo['storageProfileName']);
+		policyCell.appendChild(policyText);
+		row.appendChild(selectCell);
+		row.appendChild(dateCell);
+		row.appendChild(policyCell);
+		//console.log(restorePoints[i]);
+		$("#restorePoints").append(row);
+	}
 });
 
+function getUniqueID(objectId, type){
+	var uniqueId;
+	arrObj = objectId.split(":");
+	if(arrObj.indexOf(type) >= 0) {
+		uniqueId = arrObj[arrObj.indexOf(type)+1];
+	}
+	return uniqueId;
+}
 // It is recommended to escape user-entered names to avoid persistent XSS.
 function escape(string) {
    return $("<div>").text(string).html();
 }
 
-function getUniqueID(objectId, type){
-	console.log(objectId);
-	arrObj = objectId.split(":");
-	console.log(arrObj);
-	if(arrObj.indexOf(type) >= 0) {
-		uniqueId = arrObj[arrObj.indexOf(type)+1];
-		console.log(uniqueId);
-	}
+function convertTimestamp(unixTimestamp){
+	var d = new Date(parseInt(unixTimestamp));
+	var options = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+	return d.toLocaleString('en-US',options);
 }

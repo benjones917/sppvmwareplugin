@@ -1,10 +1,26 @@
 $(document).ready(
+		
 		function() {
+			var registeredFlag = false;
+			var userSession = WEB_PLATFORM.getUserSession();
+			console.log(userSession.serversInfo);
+			vcenterUID = userSession.serversInfo[0].serviceGuid;
+			var $dashReg = $.getJSON(PluginUtil.getWebContextPath()
+					+ "/rest/spp/dashboard", "hvid="+vcenterUID, function(data) {
+				console.log(data);
+				
+				//populate('#registerForm', data);
+			});
+			
 			var $regreq = $.getJSON(PluginUtil.getWebContextPath()
 					+ "/rest/spp/register", function(data) {
+				if(!$.isEmptyObject(data)){
+					registeredFlag = true;
+				}
+				console.log(data);
 				populate('#registerForm', data);
 			});
-
+			console.log(registeredFlag);
 			$("#registerForm").submit(function() {
 				var $form = $(this), json = {
 					registrationInfo : $form.serializeJson()
@@ -25,7 +41,8 @@ $(document).ready(
 			$('#getvminfotest').click(function () {
 				var $req = $.get(PluginUtil.getWebContextPath()
 						+ "/rest/spp/vm", "vm=BCJ-LINUX&vmid=vm-216", function(data) {
-					alert(data);
+					//alert(data);
+					console.log(data);
 				})
 			});
 			

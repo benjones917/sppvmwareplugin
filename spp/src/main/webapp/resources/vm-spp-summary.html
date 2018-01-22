@@ -6,7 +6,10 @@
    <title>VM Summary view</title>
    <!-- Use URL relative paths for all resources to keep plugin compatible with Flex and HTML clients -->
 
-   <link rel="stylesheet" href="../assets/css/default.css" media="screen" />
+   <!-- This dialog uses Yahoo pure CSS.  See http://purecss.io  -->
+   <link rel="stylesheet" href="../assets/css/pure-min.css">
+   <link rel="stylesheet" href="../assets/css/default.css">
+   
 
    <script src="../assets/jquery-1.10.2.min.js"></script>
 
@@ -18,5 +21,16 @@
 <body>
    <h3>SPP Settings</h3>
    <div id="sppInfo"></div>
+   <table class="pure-table pure-table-horizontal" id="restoreTable">
+   <thead>
+	   <tr>
+		   <th>Select</th>
+		   <th>Backup Time</th>
+		   <th>SLA Policy</th>
+	   </tr>
+   </thead>
+   <tbody id="restorePoints"></tbody>
+   </table>
+   <input type="hidden" name="latestRestoreId" value="" id="hiddenLatestRestoreId">
 </body>
 </html>

@@ -16,40 +16,81 @@
    <script src="./js/web-platform-bootstrap.js"></script>
    <script src="./js/jquery-util.js"></script>
    <script src="./js/spp-vcenter.js"></script>
-   <style>
-		body {
-			padding: 0px 24px 24px 24px
-		}
-	</style>
 </head>
-<body style=padding: "0px 24px 24px 24px">
+<body>
+	<div id="overlay-back"></div>
+	<div id="overlay">
+	    <div id="dvLoading">
+	        <p>Please wait<br>while we are registering the vCenter...</p>
+	        <img id="loading-image" src="../assets/images/loading.gif" alt="Loading..." />
+	    </div>
+	</div>
+	<div id="sppRegistration">
+		<h3>Please register your Spectrum Protect Plus appliance</h3>
+		<form id="registerForm" class="pure-form pure-form-aligned" action="/rest/spp/register">
+			<div class="pure-control-group">
+			<label id="sppHostLabel" for="sppHost">SPP Hostname/IP</label>
+			<input type="text" name="sppHost" id="sppHost" placeholder="https://"><br>
+			</div>
+			<div class="pure-control-group">
+			<label id="sppUserLabel" for="sppUser">SPP Username</label>
+			<input type="text" name="sppUser" id="sppUser"><br>
+			</div>
+			<div class="pure-control-group">
+			<label id="sppPassLabel" for="sppPass">SPP Password</label>
+			<input type="password" name="sppPass" id="sppPass"><br>
+			</div>
+			<div class="pure-controls">
+			<button type="submit" id="registrationSubmit" class="pure-button pure-button-primary">Submit</button>
+			</div>
+		</form>
+	</div>
    <div id="sppvCenter">
-   <form id="vcenterRegisterForm" class="pure-form pure-form-aligned" action="/rest/spp/vcreg">
+	   <div id="vCenterIn">
+	   <h3>This vCenter has been registered in Spectrum Protect Plus.</h3>
+	   <ul>
+	   <li><span class="vCenterLabel">Name:</span><span class="vCenterValue" id="vCenterNameVal"></span></li>
+	   <li><span class="vCenterLabel">Site:</span><span class="vCenterValue" id="vCenterSiteVal"></span></li>
+	   <li><span class="vCenterLabel">Port:</span><span class="vCenterValue" id="vCenterPortVal"></span></li>
+	   <li><span class="vCenterLabel">SSL:</span><span class="vCenterValue" id="vCenterSSLVal"></span></li>
+	   </ul>
+	   </div>
+		<div id="vCenterOut">
+		<h3>This vCenter has not been registered in Spectrum Protect Plus</h3>
+   		<form id="vcenterRegisterForm" class="pure-form pure-form-aligned" action="/rest/spp/vcreg">
 			<div class="pure-control-group">
-			<label id="vCenterHostLabel" for="vCenterHost">vCenter Hostname/IP</label>
-			<input type="text" name="vCenterHost" id="vCenterHost"><br>
+			<label id="vCenterHostLabel" for="vCenterHostInput">vCenter Hostname/IP</label>
+			<input type="text" name="hostAddress" id="vCenterHostInput"><br>
 			</div>
 			<div class="pure-control-group">
-			<label id="vCenterUserLabel" for="vCenterUser">Username</label>
-			<input type="text" name="vCenterUser" id="vCenterUser"><br>
+			<label id="vCenterUserLabel" for="vCenterUserInput">Username</label>
+			<input type="text" name="username" id="vCenterUserInput"><br>
 			</div>
 			<div class="pure-control-group">
-			<label id="vCenterPassLabel" for="vCenterPass">Password</label>
-			<input type="password" name="vCenterPass" id="vCenterPass"><br>
+			<label id="vCenterPassLabel" for="vCenterPassInput">Password</label>
+			<input type="password" name="password" id="vCenterPassInput"><br>
 			</div>
 			<div class="pure-control-group">
-			<label id="vCenterPassLabel" for="vCenterPort">Port</label>
-			<input type="text" name="vCenterPort" id="vCenterPort" value="443"><br>
+			<label id="vCenterPortLabel" for="vCenterPortInput">Port</label>
+			<input type="text" name="portNumber" id="vCenterPortInput" value="443"><br>
+			</div>
+			<div class="pure-control-group">
+			<label id="vCenterMaxVMLabel" for="vCenterMaxVMInput">Maximum VM's</label>
+			<input type="text" name="snapshotConcurrency" id="vCenterMaxVMInput" value="3">
+			<span class="pure-form-message-inline">Maximum number of VM’s to process concurrently per ESX server</span><br>
 			</div>
 			<div class="pure-controls">
             <label for="vCenterSSL" class="pure-checkbox">
-                <input id="vCenterSSL" type="checkbox" checked> Use SSL
+                <input id="vCenterSSLCheckBox" type="checkbox" value="true" checked> Use SSL
             </label>
-			<div class="pure-control-group">
-			<button  type="submit" id="submit"
+            <input id="vCenterSSLHidden" type="hidden" value="" name="sslConnection">
+            <input id="vCenterTypeHidden" type="hidden" value="vmware" name="type">
+            <div class="pure-control-group">
+			<button  type="submit" id="vCenterSubmit"
                      class="pure-button pure-button-primary">Submit</button>
 			</div>
 		</form>
+		</div>
    </div>
 </body>
 </html>

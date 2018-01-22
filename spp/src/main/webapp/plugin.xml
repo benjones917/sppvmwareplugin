@@ -105,11 +105,12 @@
          </componentClass>
       </object>
    </extension>
+   
    <!-- Dashboard View -->
    <extension id="com.ibm.spp.dashboard">
       <extendedPoint>vise.global.views</extendedPoint>
       <object>
-         <name>#{app.name}</name>
+         <name>#{dashboard.name}</name>
          <componentClass className="com.vmware.vsphere.client.htmlbridge.HtmlView">
             <object>
                <root>
@@ -124,7 +125,7 @@
    <extension id="com.ibm.spp.vcReg">
       <extendedPoint>vise.global.views</extendedPoint>
       <object>
-         <name>#{app.name}</name>
+         <name>#{vCenter.name}</name>
          <componentClass className="com.vmware.vsphere.client.htmlbridge.HtmlView">
             <object>
                <root>

@@ -4,9 +4,74 @@ body {
    font-size: 14px;
    font-family: Metropolis,"Avenir Next","Helvetica Neue",Arial,sans-serif;
    color:#565656;
+   padding: 0px 24px 24px 24px;
 }
 
 .pure-form legend {
 	font-size: 14px; 
 	color:#565656;
+}
+#vCenterIn ul{
+	list-style:none;
+}
+#vCenterIn li {
+	width:400px;
+}
+.vCenterLabel{
+	width:50px;
+	float:left;
+}
+#overlay {
+	position : absolute;
+	top      : 0;
+	left     : 0;
+	width    : 100%;
+	height   : 100%;
+	z-index  : 995;
+	display  : none;
+}
+#overlay-back {
+	position   : absolute;
+	top        : 0;
+	left       : 0;
+	width      : 100%;
+	height     : 100%;
+	background : #000;
+	opacity    : 0.6;
+	filter     : alpha(opacity=60);
+	z-index    : 990;
+	display    : none;
+}
+#dvLoading {
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 10px;
+	height: 250px;
+	width: 250px;
+	position: fixed;
+	z-index: 1000;
+	left: 50%;
+	top: 50%;
+	margin: -125px 0 0 -125px;
+	text-align: center;
+	display: none;
+}
+
+#slaPolicies ul {
+	padding:0px;
+}
+#slaPolicies li {
+	list-style:none;
+}
+#globalInfo h3, h1{
+	text-align:center;
+}
+#sppRegistration {
+	display:none;
+}
+#dashboard {
+	display:none;
+}
+#sppvCenter {
+	display:none;
 }
