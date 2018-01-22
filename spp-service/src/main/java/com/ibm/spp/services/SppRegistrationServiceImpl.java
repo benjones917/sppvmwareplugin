@@ -153,11 +153,11 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 	@Override
 	public String registerVcenter(String vcRegInfo, SppSession session) {
 		RegistrationInfo regInfo = getSppRegistrationInfo();
-		String hvUrl = session.getHost() + SppUrls.sppHypervisorUrl;
+		String hvUrl = session.getHost() + SppUrls.sppRegisterHypervisorUrl;
 		SppVcenterRegistration vcRegObj = new Gson().fromJson(vcRegInfo, SppVcenterRegistration.class);
 		Map<String,Integer> props = new HashMap<String,Integer>();
-		props.put("snapshotConcurrency", 3);
-		vcRegObj.setOpProperties(props);
+		//props.put("snapshotConcurrency", 3);
+		//vcRegObj.setOpProperties(props);
 		String postData =  new Gson().toJson(vcRegObj);
 		try {
 			CloseableHttpClient httpclient = SelfSignedHttpsClient.createAcceptSelfSignedCertificateClient();

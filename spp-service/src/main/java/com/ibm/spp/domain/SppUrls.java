@@ -12,5 +12,6 @@ public final class SppUrls {
 	public static final String sppVmVersionUrl = "/core/api/hypervisor/HVID/vm/VMID/version?from=hlo";
 	public static final String sppFolderVersionUrl = "/core/api/hypervisor/HVID/folder/FOLDERID/version?from=hlo";
 	public static final String sppHypervisorUrl = "/core/api/hypervisor";
+	public static final String sppRegisterHypervisorUrl = "/spp/ecxngp/hypervisor";
 	public static final String sppAllVmsUrl = "/core/api/hypervisor/HVID/vm?from=hlo";
 }
