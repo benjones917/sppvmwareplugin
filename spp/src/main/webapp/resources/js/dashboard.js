@@ -72,7 +72,7 @@ $(document).ready(function() {
 				+ "/rest/spp/dashboard", "hvid="+vcenterUID, function(data) {
 			
 			var totalVms = data.length;
-			$("#unprotectedCount").text(totalVms);
+			
 			for(i=0;i<totalVms;i++){
 				var slaPolicies = data[i].storageProfiles;
 				if(slaPolicies.length > 0){
@@ -83,6 +83,8 @@ $(document).ready(function() {
 					}
 				}
 			}
+			var unprotectedVm = totalVms - protectedVmCount
+			$("#unprotectedCount").text(unprotectedVm);
 			$("#protectedCount").text(protectedVmCount);
 
 			for(a=0;a<slaPolicyNames.length;a++){

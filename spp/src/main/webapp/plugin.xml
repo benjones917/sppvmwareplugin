@@ -323,13 +323,13 @@
    <extension id="com.ibm.spp.vm.summary">
       <extendedPoint>vsphere.core.vm.summarySectionViews.html</extendedPoint>
       <object>
-         <name>SPP</name>
+         <name>{vmSummary.name}</name>
          <componentClass className="com.vmware.vsphere.client.htmlbridge.HtmlView">
             <object>
                <root>
                   <url>/vsphere-client/spp/resources/vm-spp-summary.html</url>
-                  <dialogTitle>SPP Summary</dialogTitle>
-                  <dialogSize>440,400</dialogSize>
+                  <dialogTitle>Spectrum Protect Plus Restore</dialogTitle>
+                  <dialogSize>440,500</dialogSize>
                </root>
             </object>
          </componentClass>

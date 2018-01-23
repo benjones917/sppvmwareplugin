@@ -1,5 +1,4 @@
 $(document).ready(function() {
-	console.log('Restore');
 	// Set variables
 	var selectedName;
 	var selectedOptions;
@@ -61,25 +60,42 @@ $(document).ready(function() {
 		restorePoints = data;
 	})
 	var table = document.getElementById("restoreTable");
-	$("#hiddenLatestRestoreId").val(restorePoints[0].uuid);
-	for(i=0;i<restorePoints.length;i++){
+	if(restorePoints != null){
+		$("#hiddenLatestRestoreId").val(restorePoints[0].uuid);
+		for(i=0;i<restorePoints.length;i++){
+			var row = table.insertRow(-1);
+			var selectCell = row.insertCell(-1);
+			if(i>0){
+				var radio = document.createElement("p");
+			}else{
+				var radio = document.createElement("input");
+				radio.type = "radio";
+				radio.name = "restorePoint";
+				radio.value = restorePoints[i].uuid;
+			}
+			
+			selectCell.appendChild(radio);
+			var dateCell = row.insertCell(-1);
+			dateCell.innerHTML = convertTimestamp(restorePoints[i].protectionTime);
+			var policyCell = row.insertCell(-1);
+			var policyText = document.createTextNode(restorePoints[i].protectionInfo['storageProfileName']);
+			policyCell.appendChild(policyText);
+			row.appendChild(selectCell);
+			row.appendChild(dateCell);
+			row.appendChild(policyCell);
+			$("#restorePoints").append(row);
+		}
+	}else{
 		var row = table.insertRow(-1);
-		var selectCell = row.insertCell(-1);
-		var radio = document.createElement("input");
-		radio.type = "radio";
-		radio.name = "restorePoint";
-		radio.value = restorePoints[i].uuid;
-		selectCell.appendChild(radio);
-		var dateCell = row.insertCell(-1);
-		dateCell.innerHTML = convertTimestamp(restorePoints[i].protectionTime);
-		var policyCell = row.insertCell(-1);
-		var policyText = document.createTextNode(restorePoints[i].protectionInfo['storageProfileName']);
-		policyCell.appendChild(policyText);
-		row.appendChild(selectCell);
-		row.appendChild(dateCell);
-		row.appendChild(policyCell);
+		var emptyCell = row.insertCell(-1);
+		var emptyText = document.createTextNode("There are no restore points for this VM");
+		emptyCell.colSpan = 3;
+		emptyCell.append(emptyText);
+		row.append(emptyCell);
 		$("#restorePoints").append(row);
+		$("#restoreBtns").hide();
 	}
+	
 	
 	$("#restoreObject").submit(function() {
 		var restoreUrl;

@@ -26,14 +26,14 @@
 		        <input id="restoreTest" type="radio" name="restoreTypes" value="test">
 		        Test
 		    </label>
-		    <label for="restoreProduction">
+		    <!-- <label for="restoreProduction">
 		        <input id="restoreProduction" type="radio" name="restoreTypes" value="production">
 		        Production
 		    </label>
 		    <label for="restoreClone">
 		        <input id="restoreClone" type="radio" name="restoreTypes" value="clone">
 		        Clone
-		    </label>
+		    </label>-->
 		    <table class="pure-table pure-table-horizontal" id="restoreTable">
 			   <thead>
 				   <tr>
@@ -45,8 +45,10 @@
 			   <tbody id="restorePoints"></tbody>
 			   </table>
 	        	<input type="hidden" name="latestRestoreId" value="" id="hiddenLatestRestoreId">
+	        	<div id="restoreBtns">
 		       	<button  type="button" id="cancel" class="pure-button" onclick="WEB_PLATFORM.closeDialog()">Cancel</button>
 		        <button  type="submit" id="submit" class="pure-button pure-button-primary">OK</button>
+		        </div>
          </fieldset>
   </form>
 </body>

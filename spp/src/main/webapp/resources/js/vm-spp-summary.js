@@ -57,28 +57,37 @@ $(document).ready(function() {
 		restorePoints = data;
 	})
 	var table = document.getElementById("restoreTable");
-	$("#hiddenLatestRestoreId").val(restorePoints[0].id);
-	for(i=0;i<restorePoints.length;i++){
-		//var row = document.createElement("tr");
-		//var selectCell = document.createElement("td");
-		//console.log(restorePoints[i].protectionInfo['policyName']);
-		console.log(restorePoints[i]);
+	if(restorePoints != null){
+		//$("#hiddenLatestRestoreId").val(restorePoints[0].id);
+		for(i=0;i<restorePoints.length;i++){
+			//var row = document.createElement("tr");
+			//var selectCell = document.createElement("td");
+			//console.log(restorePoints[i].protectionInfo['policyName']);
+
+			var row = table.insertRow(-1);
+			//var selectCell = row.insertCell(-1);
+			//var radio = document.createElement("input");
+			//radio.type = "radio";
+			//radio.name = "restorePoint";
+			//radio.value = restorePoints[i].id;
+			//selectCell.appendChild(radio);
+			var dateCell = document.createElement("td");
+			dateCell.innerHTML = convertTimestamp(restorePoints[i].protectionTime);
+			var policyCell = document.createElement("td");
+			var policyText = document.createTextNode(restorePoints[i].protectionInfo['storageProfileName']);
+			policyCell.appendChild(policyText);
+			//row.appendChild(selectCell);
+			row.appendChild(dateCell);
+			row.appendChild(policyCell);
+			$("#restorePoints").append(row);
+		}
+	}else{
 		var row = table.insertRow(-1);
-		var selectCell = row.insertCell(-1);
-		var radio = document.createElement("input");
-		radio.type = "radio";
-		radio.name = "restorePoint";
-		radio.value = restorePoints[i].id;
-		selectCell.appendChild(radio);
-		var dateCell = document.createElement("td");
-		dateCell.innerHTML = convertTimestamp(restorePoints[i].protectionTime);
-		var policyCell = document.createElement("td");
-		var policyText = document.createTextNode(restorePoints[i].protectionInfo['storageProfileName']);
-		policyCell.appendChild(policyText);
-		row.appendChild(selectCell);
-		row.appendChild(dateCell);
-		row.appendChild(policyCell);
-		//console.log(restorePoints[i]);
+		var emptyCell = row.insertCell(-1);
+		var emptyText = document.createTextNode("There are no restore points for this VM");
+		emptyCell.colSpan = 3;
+		emptyCell.append(emptyText);
+		row.append(emptyCell);
 		$("#restorePoints").append(row);
 	}
 });
