@@ -6,4 +6,10 @@ public interface SppRestoreService {
 
 	String restoreLatestVmTest(String vmName, String vmId, SppSession session);
 
+	String restoreLatestVmProd(String vmName, String vmId, SppSession session);
+
+	String restoreVersionVmTest(String vmName, String vmId, String version, SppSession session);
+
+	String restoreVersionVmProd(String vmName, String vmId, String version, SppSession session);
+
 }

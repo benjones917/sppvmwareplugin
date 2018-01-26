@@ -85,6 +85,30 @@ public class SppServiceImpl implements SppService {
 	}
 	
 	@Override
+	public String restoreLatestVmProd(String vmName, String vmId) {
+		SppSession session = createSppSession();
+		String restoreVm = sppRestoreService.restoreLatestVmProd(vmName, vmId, session);
+		deleteSppSession(session);
+		return restoreVm;
+	}
+	
+	@Override
+	public String restoreVersionVmTest(String vmName, String vmId, String version) {
+		SppSession session = createSppSession();
+		String restoreVm = sppRestoreService.restoreVersionVmTest(vmName, vmId, version, session);
+		deleteSppSession(session);
+		return restoreVm;
+	}
+	
+	@Override
+	public String restoreVersionVmProd(String vmName, String vmId, String version) {
+		SppSession session = createSppSession();
+		String restoreVm = sppRestoreService.restoreVersionVmProd(vmName, vmId, version, session);
+		deleteSppSession(session);
+		return restoreVm;
+	}
+	
+	@Override
 	public String getSppActiveRestoreSessions() {
 		SppSession session = createSppSession();
 		String activeSessions = sppInfoService.getSppActiveRestoreSessions(session);

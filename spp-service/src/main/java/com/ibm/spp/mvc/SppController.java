@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,7 +55,7 @@ public class SppController {
 		String registration = new Gson().toJson(regInfo);
 		return registration;
 	}
-	
+
 	@RequestMapping(value = "/vcreg", method = RequestMethod.POST)
 	@ResponseBody
 	public String vcReg(@RequestParam(value = "registrationInfo", required = true) String registrationInfo)
@@ -64,8 +65,7 @@ public class SppController {
 
 	@RequestMapping(value = "/vcreg", method = RequestMethod.GET)
 	@ResponseBody
-	public String getVcReg(@RequestParam(value = "vcid", required = true) String vcId) 
-			throws Exception {
+	public String getVcReg(@RequestParam(value = "vcid", required = true) String vcId) throws Exception {
 		String registration = _sppService.getVcRegistration(vcId);
 		return registration;
 	}
@@ -106,7 +106,7 @@ public class SppController {
 	// sla String parameter represents a list of SLA policies
 	@RequestMapping(value = "/assignfolder", method = RequestMethod.POST)
 	@ResponseBody
-	public String assignFolderToSla(@RequestParam(value = "folder", required = true) String folder, 
+	public String assignFolderToSla(@RequestParam(value = "folder", required = true) String folder,
 			@RequestParam(value = "groupid", required = true) String groupid,
 			@RequestParam(value = "sla", required = true) String sla) throws Exception {
 		String folderAssignment = _sppService.assignFolderToSla(folder, groupid, sla);
@@ -114,17 +114,43 @@ public class SppController {
 	}
 
 	// restore latest VM as in test mode
-	// for now this is the only option for restore
-	// will add restore version selection in the future
 	@RequestMapping(value = "/restore/latest/test", method = RequestMethod.POST)
 	@ResponseBody
 	public String restoreLatestVmTest(@RequestParam(value = "vm", required = true) String vm,
-			@RequestParam(value = "vmid", required = true) String vmid) 
-			throws Exception {
+			@RequestParam(value = "vmid", required = true) String vmid) throws Exception {
 		String vmRestore = _sppService.restoreLatestVmTest(vm, vmid);
 		return vmRestore;
 	}
+
+	// restore latest VM as in prod mode
+	@RequestMapping(value = "/restore/latest/prod", method = RequestMethod.POST)
+	@ResponseBody
+	public String restoreLatestVmProd(@RequestParam(value = "vm", required = true) String vm,
+			@RequestParam(value = "vmid", required = true) String vmid) throws Exception {
+		String vmRestore = _sppService.restoreLatestVmProd(vm, vmid);
+		return vmRestore;
+	}
 	
+	// restore specific version of VM test mode
+	@RequestMapping(value = "/restore/version/test", method = RequestMethod.POST)
+	@ResponseBody
+	public String restoreVersionVmTest(@RequestParam(value = "vm", required = true) String vm,
+			@RequestParam(value = "vmid", required = true) String vmid,
+			@RequestBody String version) throws Exception {
+		String vmRestore = _sppService.restoreVersionVmTest(vm, vmid, version);
+		return vmRestore;
+	}
+		
+	// restore specific version of VM prod mode
+	@RequestMapping(value = "/restore/version/prod", method = RequestMethod.POST)
+	@ResponseBody
+	public String restoreVersionVmProd(@RequestParam(value = "vm", required = true) String vm,
+			@RequestParam(value = "vmid", required = true) String vmid,
+			@RequestBody String version) throws Exception {
+		String vmRestore = _sppService.restoreVersionVmProd(vm, vmid, version);
+		return vmRestore;
+	}
+
 	// get active restore sessions from SPP
 	@RequestMapping(value = "/activerestores", method = RequestMethod.GET)
 	@ResponseBody
@@ -132,7 +158,7 @@ public class SppController {
 		String restoreSessions = _sppService.getSppActiveRestoreSessions();
 		return restoreSessions;
 	}
-	
+
 	@RequestMapping(value = "/vmversions", method = RequestMethod.GET)
 	@ResponseBody
 	public String getSppVmVersionInfo(@RequestParam(value = "vmid", required = true) String vmid,
@@ -140,7 +166,7 @@ public class SppController {
 		String vmVersionInfo = _sppService.getSppVmVersionInfo(vmid, hvid);
 		return vmVersionInfo;
 	}
-	
+
 	@RequestMapping(value = "/folderversions", method = RequestMethod.GET)
 	@ResponseBody
 	public String getSppFolderVersionInfo(@RequestParam(value = "folderid", required = true) String folderid,
@@ -148,8 +174,8 @@ public class SppController {
 		String vmVersionInfo = _sppService.getSppFolderVersionInfo(folderid, hvid);
 		return vmVersionInfo;
 	}
-	
-	//hvid here represents the internal vSphere ID, NOT the SPP ID
+
+	// hvid here represents the internal vSphere ID, NOT the SPP ID
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
 	@ResponseBody
 	public String getSppDashInfo(@RequestParam(value = "hvid", required = true) String hvid) throws Exception {

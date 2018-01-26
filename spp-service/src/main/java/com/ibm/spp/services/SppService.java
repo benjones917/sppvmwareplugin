@@ -30,4 +30,10 @@ public interface SppService {
 	String getVcRegistration(String vcId);
 
 	String getDashboardInfo(String vcId);
+
+	String restoreLatestVmProd(String vmName, String vmId);
+
+	String restoreVersionVmTest(String vmName, String vmId, String version);
+
+	String restoreVersionVmProd(String vmName, String vmId, String version);
 }

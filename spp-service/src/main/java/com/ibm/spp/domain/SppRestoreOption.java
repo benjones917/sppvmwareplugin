@@ -15,9 +15,11 @@ public class SppRestoreOption {
 	@Expose
 	public final boolean allowsessoverwrite = true;
 	@Expose
-	public final String mode = "test";
+	public String mode;
 	@Expose
 	public final boolean vmscripts = false;
+	@Expose
+	public boolean allowvmoverwrite;
 	
 	public SppRestoreOption() {
 		super();
@@ -49,6 +51,18 @@ public class SppRestoreOption {
 
 	public boolean isVmscripts() {
 		return vmscripts;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
+	public boolean isAllowvmoverwrite() {
+		return allowvmoverwrite;
+	}
+
+	public void setAllowvmoverwrite(boolean allowvmoverwrite) {
+		this.allowvmoverwrite = allowvmoverwrite;
 	}
 	
 	

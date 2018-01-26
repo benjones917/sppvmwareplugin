@@ -5,9 +5,11 @@ import com.google.gson.annotations.Expose;
 public class SppRestoreVersionMetadata {
 	
 	@Expose
-	public final boolean useLatest = true;
+	public boolean useLatest;
 	@Expose
-	public final String name = "Use Latest";
+	public String protectionTime;
+	@Expose
+	public String name;
 	
 	public SppRestoreVersionMetadata() {
 		super();
@@ -17,11 +19,24 @@ public class SppRestoreVersionMetadata {
 		return useLatest;
 	}
 
+	public String getProtectionTime() {
+		return protectionTime;
+	}
+
+	public void setProtectionTime(String protectionTime) {
+		this.protectionTime = protectionTime;
+	}
+
 	public String getName() {
 		return name;
 	}
-	
-	
-	
-	
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setUseLatest(boolean useLatest) {
+		this.useLatest = useLatest;
+	}
+
 }
