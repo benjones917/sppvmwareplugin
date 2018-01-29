@@ -136,9 +136,19 @@ $(document).ready(function() {
 		restoreURL = restoreURL.slice(0, -1);
 		testParams = {};
 		console.log(restoreURL);
-		var $req = $.post(restoreURL, selectedVer, function(data) {
-					console.log(data);
-		})
+		postData = JSON.stringify(selectedVer);
+		var $req = $.ajax({
+			  url:restoreURL,
+			  type:"POST",
+			  data:postData,
+			  contentType:"application/json; charset=utf-8",
+			  dataType:"json",
+			  success: function(data){
+				  console.log(data);
+			  }})
+//		var $req = $.post(restoreURL, postData, function(data) {
+//					console.log(data);
+//		}, 'json')
 		WEB_PLATFORM.closeDialog();
 		//return false;
 	});
