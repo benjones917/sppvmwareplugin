@@ -7,6 +7,7 @@ $(document).ready(function() {
 	var selectedId;
 	var params = {};
 	var versionParams = {};
+	var selectedVer = {};
 	
 	// Get current objectID
 	var targets = WEB_PLATFORM.getActionTargets();
@@ -58,6 +59,7 @@ $(document).ready(function() {
 	var $req = $.getJSON(PluginUtil.getWebContextPath()
 			+ "/rest/spp/vmversions", versionParams, function(data) {
 		restorePoints = data;
+		console.log(data);
 	})
 	var table = document.getElementById("restoreTable");
 	if(restorePoints != null){
@@ -65,14 +67,14 @@ $(document).ready(function() {
 		for(i=0;i<restorePoints.length;i++){
 			var row = table.insertRow(-1);
 			var selectCell = row.insertCell(-1);
-			if(i>0){
-				var radio = document.createElement("p");
-			}else{
+			//if(i>0){
+				//var radio = document.createElement("p");
+			//}else{
 				var radio = document.createElement("input");
 				radio.type = "radio";
 				radio.name = "restorePoint";
 				radio.value = restorePoints[i].uuid;
-			}
+			//}
 			
 			selectCell.appendChild(radio);
 			var dateCell = row.insertCell(-1);
@@ -104,22 +106,41 @@ $(document).ready(function() {
 			return false;
 		}
 		/* Changed selectedType once the endpoint has been created to restore different types */
-		//var selectedType = $( "input[name='restoreTypes']:checked").val();
-		var selectedType = 'test'
+		var selectedType = $( "input[name='restoreTypes']:checked").val();
+		//var selectedType = 'test'
 		var selectedPoint = $( "input[name='restorePoint']:checked").val();
 		var latestPoint = $("#hiddenLatestRestoreId").val();
 
 		if(selectedPoint == latestPoint){
-			restoreURL = PluginUtil.getWebContextPath() + "/rest/spp/restore/latest/" + selectedType;
+			restoreURL = PluginUtil.getWebContextPath() + "/rest/spp/restore/latest/" + selectedType + "?";
 		}else{
 			// Change restoreURL for endpoints when selecting different restore points
-			restoreURL = PluginUtil.getWebContextPath() + "/rest/spp/restore/latest/" + selectedType;
+			restoreURL = PluginUtil.getWebContextPath() + "/rest/spp/restore/version/" + selectedType + "?";
 		}
-		var $req = $.post(restoreURL, params, function(data) {
+		for(p=0;p<restorePoints.length;p++){
+			if(restorePoints[p].uuid == selectedPoint){
+				//selectedVer = JSON.stringify(restorePoints[p]);
+				selectedVer = restorePoints[p];
+			}
+		}
+		console.log(selectedVer);
+		//console.log(restoreURL);
+		console.log(params);
+		//var test = params.serializeJson();
+		for (let key in params) {
+		    let value = params[key];
+		    console.log(key + "=" + value);
+		    restoreURL += key + "=" + value + "&"
+		    
+		}
+		restoreURL = restoreURL.slice(0, -1);
+		testParams = {};
+		console.log(restoreURL);
+		var $req = $.post(restoreURL, selectedVer, function(data) {
 					console.log(data);
 		})
 		WEB_PLATFORM.closeDialog();
-		return false;
+		//return false;
 	});
 });
 

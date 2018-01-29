@@ -323,7 +323,7 @@
    <extension id="com.ibm.spp.vm.summary">
       <extendedPoint>vsphere.core.vm.summarySectionViews.html</extendedPoint>
       <object>
-         <name>{vmSummary.name}</name>
+         <name>#{vmSummary.name}</name>
          <componentClass className="com.vmware.vsphere.client.htmlbridge.HtmlView">
             <object>
                <root>
