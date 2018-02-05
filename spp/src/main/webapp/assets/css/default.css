@@ -56,6 +56,9 @@ body {
 	text-align: center;
 	display: none;
 }
+#sppRegistration li{
+	list-style:none;
+}
 
 #slaPolicies ul {
 	padding:0px;

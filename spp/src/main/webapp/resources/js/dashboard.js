@@ -13,27 +13,22 @@ $(document).ready(function() {
 	$.ajaxSetup({
 	    async: true
 	});
-	
+	function testRefresh(){
+		console.log('test');
+		WEB_PLATFORM.sendNavigationRequest('com.ibm.spp.vcReg');
+	}
 	if(!registeredFlag){
-		$("#sppRegistration").show();
-		$("#registerForm").submit(function() {
-			var $form = $(this) 
-			var sppHost = $("#sppHost").val();
-			var sppUser = $("#sppUser").val();
-			var sppPass = $("#sppPass").val();
-			if(sppHost == "" || sppUser == "" || sppPass == ""){
-				alert("Please make sure all fields are filled out");
-				return false;
-			}
-			json = { registrationInfo : $form.serializeJson()};
-			url = PluginUtil.getWebContextPath() + $form.attr('action');
-			$.post(url, json, function(data) {
-				location.reload();
-				return true;
-			})
-			return false;
-		});
+		WEB_PLATFORM.sendNavigationRequest('com.ibm.spp.vcReg');
+
+		/*var url = "spp/resources/restore-dialog.html";
+		WEB_PLATFORM.openModalDialog("This is ModalDialog Title", url, 500, 300, null, "no", false);*/
 	}else{
+		var userSession = WEB_PLATFORM.getUserSession();
+		vcenterUID = userSession.serversInfo[0].serviceGuid;
+		var $dashReg = $.getJSON(PluginUtil.getWebContextPath() + "/rest/spp/vcreg", "vcid="+vcenterUID)
+			.fail(function( jqxhr, textStatus, error ) {
+				WEB_PLATFORM.sendNavigationRequest('com.ibm.spp.vcReg');
+			});
 		$("#dashboard").show();
 		var userSession = WEB_PLATFORM.getUserSession();
 		var slaPolicyNames = [];
@@ -46,23 +41,37 @@ $(document).ready(function() {
 		});
 		var $slareq = $.getJSON(PluginUtil.getWebContextPath()
 				+ "/rest/spp/sla", function(data) {
+			slaHeaderGroup = document.createElement("div")
+			slaHeaderGroup.className = "pure-g";
+			
 			slaHeaderDiv = document.createElement("div");
 			slaHeaderDiv.className = "pure-u-1";
 			slaHeaderText = document.createElement("h3");
 			slaHeaderText.innerText = "SLA Policies";
 			slaHeaderDiv.append(slaHeaderText);
-			$("#slaPolicies").append(slaHeaderDiv);
+			slaHeaderGroup.appendChild(slaHeaderDiv);
+			$("#slaPolicies").append(slaHeaderGroup);
 			
+			slaPolicyGroup = document.createElement("div")
+			slaPolicyGroup.className = "pure-g";
 			for(x=0;x<data.length;x++){
+				
 				slaPolicyNames.push(data[x].name);
 				protectedVms[x] = [];
-				slaPolicyDiv = document.createElement("div");
-				slaPolicyDiv.className = "pure-u-1-" + data.length;
+				var slaPolicyDiv = document.createElement("div");
+				slaPolicyDiv.className = "pure-u-1-4";
 				slaPolicyDiv.id = "sla-" + data[x].name;
-				slaPolicyHeader = document.createElement("h3");
+				var slaPolicyHeader = document.createElement("h3");
 				slaPolicyHeader.innerText = data[x].name;
 				slaPolicyDiv.append(slaPolicyHeader);
-				$("#slaPolicies").append(slaPolicyDiv);
+				slaPolicyGroup.appendChild(slaPolicyDiv);
+				
+				if((x%3) == 0 && x!=0 || x== (data.length-1)){
+					$("#slaPolicies").append(slaPolicyGroup);
+					slaPolicyGroup = document.createElement("div")
+					slaPolicyGroup.className = "pure-g";
+					console.log("New Div");
+				}
 			}
 		});
 		$.ajaxSetup({

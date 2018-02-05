@@ -25,26 +25,6 @@
 	        <img id="loading-image" src="../assets/images/loading.gif" alt="Loading..." />
 	    </div>
 	</div>
-	<div id="sppRegistration">
-		<h3>Please register your Spectrum Protect Plus appliance</h3>
-		<form id="registerForm" class="pure-form pure-form-aligned" action="/rest/spp/register">
-			<div class="pure-control-group">
-			<label id="sppHostLabel" for="sppHost">SPP Hostname/IP</label>
-			<input type="text" name="sppHost" id="sppHost" placeholder="https://"><br>
-			</div>
-			<div class="pure-control-group">
-			<label id="sppUserLabel" for="sppUser">SPP Username</label>
-			<input type="text" name="sppUser" id="sppUser"><br>
-			</div>
-			<div class="pure-control-group">
-			<label id="sppPassLabel" for="sppPass">SPP Password</label>
-			<input type="password" name="sppPass" id="sppPass"><br>
-			</div>
-			<div class="pure-controls">
-			<button type="submit" id="registrationSubmit" class="pure-button pure-button-primary">Submit</button>
-			</div>
-		</form>
-	</div>
 	<div id="dashboard">
 		<div class="pure-g" id="globalInfo">
 		    <div class="pure-u-1-2">
@@ -56,7 +36,7 @@
 		    	<h1 id="unprotectedCount"></h1>
 		    </div>
 		</div>
-		<div class="pure-g" id="slaPolicies"></div>
+		<div id="slaPolicies"></div>
 	</div>
 </body>
 </html>

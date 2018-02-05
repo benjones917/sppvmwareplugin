@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	$('#sppRegistration').hide();
 	/** Check that SPP has been registered **/
 	var registeredFlag = false;
 	$.ajaxSetup({
@@ -41,12 +42,15 @@ $(document).ready(function() {
 		console.log("vCenter Reg");
 		vcenterUID = userSession.serversInfo[0].serviceGuid;
 		vCenterName = userSession.serversInfo[0].name
+		$("#vCenterHostInput").val(vCenterName);
 		var $dashReg = $.getJSON(PluginUtil.getWebContextPath() + "/rest/spp/vcreg", "vcid="+vcenterUID)
 			.done(function( data ) {
 				console.log(data);
 				loadData(data);
 				$("#vCenterIn").show();
-			    //$("#vCenterOut").hide();
+			    $("#vCenterOut").hide();
+				
+				//$("#vCenterOut").show();
 			  })
 			  .fail(function( jqxhr, textStatus, error ) {
 			    console.log( "vCenter not registered" );

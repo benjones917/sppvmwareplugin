@@ -26,7 +26,7 @@
          <name>#{app.name}</name>
          <icon>#{appIcon}</icon>
          <categoryUid>vsphere.core.controlcenter.monitoringCategory</categoryUid>
-         <targetViewUid>com.ibm.spp.mainView</targetViewUid>
+         <targetViewUid>com.ibm.spp.vcReg</targetViewUid>
       </object>
    </extension>
    
@@ -37,7 +37,7 @@
          <title>#{app.name}</title>
          <icon>#{appIconSmall}</icon>
          <parentUid>vsphere.core.navigator.solutionsCategory</parentUid>
-         <navigationTargetUid>com.ibm.spp.mainView</navigationTargetUid>
+         <navigationTargetUid>com.ibm.spp.vcReg</navigationTargetUid>
          <viewOpenedUponFocus className="com.vmware.ui.objectnavigator.views.CategoryNodeTreeView" />
       </object>
    </extension>
@@ -63,11 +63,20 @@
    </extension>
    
    <!-- Node for global app vCenter view -->
-   <extension id="com.ibm.spp.node.vcView">
+   <!--<extension id="com.ibm.spp.node.vcView">
       <extendedPoint>vise.navigator.nodespecs</extendedPoint>
       <object>
          <title>Main View</title>
          <navigationTargetUid>com.ibm.spp.mainView</navigationTargetUid>
+         <parentUid>com.ibm.spp.node</parentUid>
+      </object>
+   </extension>-->
+   
+   <extension id="com.ibm.spp.node.vcReg">
+   	<extendedPoint>vise.navigator.nodespecs</extendedPoint>
+   	<object>
+         <title>Introduction</title>
+         <navigationTargetUid>com.ibm.spp.vcReg</navigationTargetUid>
          <parentUid>com.ibm.spp.node</parentUid>
       </object>
    </extension>
@@ -81,16 +90,7 @@
       </object>
    </extension>
    
-   <extension id="com.ibm.spp.node.vcReg">
-   	<extendedPoint>vise.navigator.nodespecs</extendedPoint>
-   	<object>
-         <title>vCenter</title>
-         <navigationTargetUid>com.ibm.spp.vcReg</navigationTargetUid>
-         <parentUid>com.ibm.spp.node</parentUid>
-      </object>
-   </extension>
-
-   <!-- Main view -->
+	<!-- Main view -->
 
    <extension id="com.ibm.spp.mainView">
       <extendedPoint>vise.global.views</extendedPoint>
