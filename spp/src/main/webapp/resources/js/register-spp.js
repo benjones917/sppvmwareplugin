@@ -1,6 +1,7 @@
 $(document).ready(
 		
 		function() {
+			WEB_PLATFORM.sendNavigationRequest('com.ibm.spp.vcReg');
 			var registeredFlag = false;
 			var userSession = WEB_PLATFORM.getUserSession();
 			console.log(userSession.serversInfo);

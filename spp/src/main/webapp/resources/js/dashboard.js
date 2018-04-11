@@ -70,7 +70,6 @@ $(document).ready(function() {
 					$("#slaPolicies").append(slaPolicyGroup);
 					slaPolicyGroup = document.createElement("div")
 					slaPolicyGroup.className = "pure-g";
-					console.log("New Div");
 				}
 			}
 		});
