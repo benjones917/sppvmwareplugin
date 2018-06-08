@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-Vendor: VMware
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.3
 Tool: Bundlor 1.1.0.RELEASE
 Bundle-Name: spp-service
 Bundle-ManifestVersion: 2
@@ -9,8 +9,8 @@ Bundle-ClassPath: httpclient-4.5.3.jar,
  .,
  httpcore-4.4.6.jar,
  commons-lang3-3.7.jar
-Export-Package: com.ibm.spp.services;version="1.0.0",
- com.ibm.spp.mvc;version="1.0.0"
+Export-Package: com.ibm.spp.services;version="1.0.3",
+ com.ibm.spp.mvc;version="1.0.3"
 Import-Package: com.google.gson;version="2.3.1",
  com.vmware.vise.data;version=0,
  com.vmware.vise.data.query;version=0,
