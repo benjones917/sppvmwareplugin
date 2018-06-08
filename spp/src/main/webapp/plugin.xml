@@ -48,7 +48,7 @@
          <actions>
             <com.vmware.actionsfw.ActionSpec>
                <uid>com.ibm.spp.sampleAction1</uid>
-               <label>#{sampleAction1.name}</label>
+               <label>Test</label>
                <icon>#{addIcon}</icon>
                <delegate>
                   <className>com.vmware.vsphere.client.htmlbridge.HtmlActionDelegate</className>
@@ -110,7 +110,7 @@
    <extension id="com.ibm.spp.dashboard">
       <extendedPoint>vise.global.views</extendedPoint>
       <object>
-         <name>#{dashboard.name}</name>
+         <name>Dashboard</name>
          <componentClass className="com.vmware.vsphere.client.htmlbridge.HtmlView">
             <object>
                <root>
@@ -125,7 +125,7 @@
    <extension id="com.ibm.spp.vcReg">
       <extendedPoint>vise.global.views</extendedPoint>
       <object>
-         <name>#{vCenter.name}</name>
+         <name>Registration</name>
          <componentClass className="com.vmware.vsphere.client.htmlbridge.HtmlView">
             <object>
                <root>
@@ -226,7 +226,7 @@
             <com.vmware.actionsfw.ActionSpec>
                <!-- UI action: show dialog -->
                <uid>com.ibm.spp.editSlaPolicy</uid>
-               <label>#{editVMSlaPolicy.name}</label>
+               <label>Edit SLA Policy</label>
                <icon>#{editIcon}</icon>
                <delegate>
                	  <className>com.vmware.vsphere.client.htmlbridge.HtmlActionDelegate</className>
@@ -241,7 +241,7 @@
             <com.vmware.actionsfw.ActionSpec>
                <!-- Action to do a restore on a virtual machine -->
                <uid>com.ibm.spp.restoreVM</uid>
-               <label>#{restoreVM.name}</label>
+               <label>Restore VM</label>
                <delegate>
                	  <className>com.vmware.vsphere.client.htmlbridge.HtmlActionDelegate</className>
                   <object><root>
@@ -268,7 +268,7 @@
       <extendedPoint>vsphere.core.menus.solutionMenus</extendedPoint>
       <object>
          <!-- <label> is required here because it is an extension to an existing menu -->
-         <label>#{actionMenu.label}</label>
+         <label>IBM SPP</label>
          <icon>#{appIconSmall}</icon>
          <uid>com.ibm.spp.vmMenu</uid>
          <children>
@@ -343,7 +343,7 @@
             <com.vmware.actionsfw.ActionSpec>
                <!-- UI action: show dialog -->
                <uid>com.ibm.spp.editFolderSlaPolicy</uid>
-               <label>#{editFolderSlaPolicy.name}</label>
+               <label>Edit SLA Policy</label>
                <icon>#{editIcon}</icon>
                <delegate>
                	  <className>com.vmware.vsphere.client.htmlbridge.HtmlActionDelegate</className>
@@ -370,7 +370,7 @@
       <extendedPoint>vsphere.core.menus.solutionMenus</extendedPoint>
       <object>
          <!-- <label> is required here because it is an extension to an existing menu -->
-         <label>#{actionMenu.label}</label>
+         <label>IBM SPP</label>
          <icon>#{appIconSmall}</icon>
          <uid>com.ibm.spp.folderMenu</uid>
          <children>
