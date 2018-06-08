@@ -127,7 +127,7 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 	private String getRegistrationInfoPath() {
 		String path;
 		if (SystemUtils.IS_OS_WINDOWS) {
-			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\spp";
+			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\data\\spp";
 		} else if (SystemUtils.IS_OS_MAC) {
 			path = "/var/lib/spp";
 		} else {
@@ -141,7 +141,7 @@ public class SppRegistrationServiceImpl implements SppRegistrationService {
 	private String getRegistrationInfoFilePath() {
 		String path;
 		if (SystemUtils.IS_OS_WINDOWS) {
-			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\spp\\regInfo.config";
+			path = System.getenv("PROGRAMDATA") + "\\VMWare\\vCenterServer\\data\\spp\\regInfo.config";
 		} else if (SystemUtils.IS_OS_MAC) {
 			path = "/var/lib/spp/regInfo.config";
 		} else {
